@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Services\User\UserService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+class UserController extends Controller
+{
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
+    public function index(): JsonResponse
+    {
+        return $this->userService->getDataUser()->toJson();
+    }
+
+    public function show($id): JsonResponse
+    {
+        return $this->userService->getUserById($id)->toJson();
+    }
+
+    public function store(): JsonResponse
+    {
+        return $this->userService->createUser()->toJson();
+    }
+
+    public function update($id): JsonResponse
+    {
+        return $this->userService->updateUser($id)->toJson();
+    }
+
+    public function destroy($id): JsonResponse
+    {
+        return $this->userService->deleteUserById($id)->toJson();
+    }
+}
