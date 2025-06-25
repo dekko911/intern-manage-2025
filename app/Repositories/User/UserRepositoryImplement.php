@@ -14,6 +14,7 @@ class UserRepositoryImplement extends Eloquent implements UserRepository
      * @property Model|mixed $model;
      */
     protected User $model;
+
     protected $search;
 
     public function __construct(User $model)

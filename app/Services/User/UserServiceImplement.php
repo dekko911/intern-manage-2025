@@ -25,9 +25,9 @@ class UserServiceImplement extends ServiceApi implements UserService
      */
     protected UserRepository $mainRepository;
 
-    protected $file;
-
     protected Request $request;
+
+    protected $file;
 
     public function __construct(UserRepository $mainRepository, Request $request)
     {
