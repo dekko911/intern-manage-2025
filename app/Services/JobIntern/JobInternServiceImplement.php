@@ -69,7 +69,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
             ]);
 
             $data = $this->mainRepository->create([
-                'user_id' => Auth::id(),
+                'user_id' => $this->request->user_id, // inget ubah
                 'created' => $this->request->created,
                 'task' => $this->request->task,
                 'description' => $this->request->description,
