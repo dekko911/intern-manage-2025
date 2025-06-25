@@ -71,6 +71,7 @@ class UserServiceImplement extends ServiceApi implements UserService
                 'name' => ['required'],
                 'email' => ['required'],
                 'password' => ['required', 'confirmed', 'min:6'],
+                'role' => ['required'],
                 'photo' => ['nullable', 'mimes:png,jpg,webp', 'max:1024'],
             ]);
 
@@ -85,6 +86,7 @@ class UserServiceImplement extends ServiceApi implements UserService
                 'name' => $this->request->name,
                 'email' => $this->request->email,
                 'password' => $this->request->password,
+                'role' => $this->request->role,
                 'photo' => $fileName ?? "-",
             ]);
 
@@ -104,6 +106,7 @@ class UserServiceImplement extends ServiceApi implements UserService
                 'name' => ['required'],
                 'email' => ['required'],
                 'password' => ['confirmed', 'min:6'],
+                'role' => ['required'],
                 'photo' => ['mimes:png,jpg,webp', 'max:1024'],
             ]);
 
@@ -129,6 +132,10 @@ class UserServiceImplement extends ServiceApi implements UserService
 
             if ($this->request->password) {
                 $data = $this->mainRepository->update($id, ['password' => $this->request->password]);
+            }
+
+            if ($this->request->role) {
+                $data = $this->mainRepository->update($id, ['role' => $this->request->role]);
             }
 
             if ($this->request->photo) {

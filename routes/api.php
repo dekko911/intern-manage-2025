@@ -5,10 +5,8 @@
 // Route::can(); dapat ide.
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CommandController;
 use App\Http\Controllers\InternAttendController;
 use App\Http\Controllers\JobInternController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +32,5 @@ Route::middleware(['api', 'auth:sanctum', 'ability:intern'])->group(function () 
 });
 
 Route::apiResource('/users', UserController::class);
-Route::apiResource('/roles', RoleController::class);
 Route::apiResource('/intern_attends', InternAttendController::class);
 Route::apiResource('/job_interns', JobInternController::class);

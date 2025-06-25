@@ -20,9 +20,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $user = User::where('email', $request->email)->first();
 
-            $roles = $user->roles()->pluck('name')->all();
-
-            $token = $user->createToken($user->name, $roles, now()->addDay());
+            $token = $user->createToken($user->name, [$user->role], now()->addDay());
 
             return response()->json([
                 'status' => 'success',

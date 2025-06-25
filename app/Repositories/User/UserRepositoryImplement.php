@@ -25,11 +25,11 @@ class UserRepositoryImplement extends Eloquent implements UserRepository
 
     public function getDataUser()
     {
-        return $this->model->latest('created_at')->with(['roles'])->where(function ($q) {
+        return $this->model->latest('created_at')->where(function ($q) {
             if ($this->search) {
                 return $q->where('name', 'like', "%$this->search%")
                     ->orWhere('email', 'like', "%$this->search%")
-                    ->orWhereRelation('roles', 'name', 'like', "%$this->search%");
+                    ->orWhere('role', 'like', "%$this->search%");
             }
         })->get();
     }

@@ -10,13 +10,14 @@ use Laravel\Sanctum\HasApiTokens;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $name
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
+ * @property string $role
  * @property string|null $remember_token
  * @property string $photo
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -27,8 +28,6 @@ use LaravelEasyRepository\Traits\GenUid;
  * @property-read int|null $job_interns_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Role> $roles
- * @property-read int|null $roles_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
@@ -44,6 +43,7 @@ use LaravelEasyRepository\Traits\GenUid;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhoto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRole($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -60,6 +60,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
         'photo',
     ];
 
@@ -84,11 +85,6 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function roles()
-    {
-        return $this->hasMany(Role::class, 'user_id', 'id');
     }
 
     public function intern_attends()

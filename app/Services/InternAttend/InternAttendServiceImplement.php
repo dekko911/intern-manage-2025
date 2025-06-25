@@ -70,7 +70,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
             $status = $this->request->enum('status', CheckAttendStatus::class);
 
             $data = $this->mainRepository->create([
-                'user_id' => $this->request->user_id,
+                'user_id' => $this->request->user_id, // inget ubah
                 'status' => $status,
                 'tanggal' => $this->request->tanggal,
                 'jam_masuk' => $this->request->jam_masuk ?? null, // alternative waktu.
