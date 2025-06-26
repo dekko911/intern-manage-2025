@@ -2,7 +2,7 @@
 
 // Route::get||post||patch||delete
 
-// Route::can(); dapat ide.
+// Route::can(); dapat ide untuk role & permission third party.
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InternAttendController;
@@ -18,6 +18,8 @@ Route::get(
 )->middleware('auth:sanctum');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/register', [UserController::class, 'store'])->name('register');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum');
 
 Route::middleware(['api', 'auth:sanctum', 'ability:admin'])->group(function () {
     //
