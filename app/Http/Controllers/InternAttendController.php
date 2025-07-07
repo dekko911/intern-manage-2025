@@ -30,9 +30,9 @@ class InternAttendController extends Controller
         return $this->internAttendService->createAttend()->toJson();
     }
 
-    public function update(): JsonResponse
+    public function update($id): JsonResponse
     {
-        return $this->internAttendService->updateAttend()->toJson();
+        return $this->internAttendService->updateAttend($id)->toJson();
     }
 
     public function destroy($id): JsonResponse

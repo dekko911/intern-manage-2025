@@ -16,19 +16,23 @@ Route::get(
 Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/register', [UserController::class, 'store'])->name('register');
-    Route::apiResource('/users', UserController::class);
+});
+
+Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
     Route::apiResource('/intern_attends', InternAttendController::class);
     Route::apiResource('/job_interns', JobInternController::class);
 });
 
-Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
-    //
-});
-
 Route::middleware(['auth:sanctum', 'ability:admin,staff'])->group(function () {
-    //
+    Route::apiResource('/users', UserController::class);
+    Route::get('/job_intern', [JobInternController::class, 'index']);
+    Route::get('/intern_attend', [InternAttendController::class, 'index']);
+    Route::post('/job_intern', [JobInternController::class, 'store']);
 });
 
 Route::middleware(['auth:sanctum', 'ability:intern'])->group(function () {
-    //
+    Route::get('/attend_intern', [InternAttendController::class, 'index']);
+    Route::post('/attend_intern', [InternAttendController::class, 'store']);
+    Route::get('/intern_job', [JobInternController::class, 'index']);
+    Route::post('/intern_job', [JobInternController::class, 'store']);
 });

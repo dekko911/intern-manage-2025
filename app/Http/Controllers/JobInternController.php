@@ -30,9 +30,9 @@ class JobInternController extends Controller
         return $this->jobInternService->createInternJob()->toJson();
     }
 
-    public function update()
+    public function update($id): JsonResponse
     {
-        return $this->jobInternService->updateInternJob()->toJson();
+        return $this->jobInternService->updateInternJob($id)->toJson();
     }
 
     public function destroy($id): JsonResponse

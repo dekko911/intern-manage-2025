@@ -34,9 +34,4 @@ class InternAttendRepositoryImplement extends Eloquent implements InternAttendRe
             }
         })->get();
     }
-
-    public function updateAttend(array $attributes)
-    {
-        return $this->model->update($attributes);
-    }
 }

@@ -12,7 +12,7 @@ interface InternAttendService extends BaseService
 
     public function createAttend();
 
-    public function updateAttend();
+    public function updateAttend($id);
 
     public function deleteInternAttendById($id);
 }

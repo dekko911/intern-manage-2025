@@ -12,7 +12,7 @@ interface JobInternService extends BaseService
 
     public function createInternJob();
 
-    public function updateInternJob();
+    public function updateInternJob($id);
 
     public function deleteJobInternById($id);
 }

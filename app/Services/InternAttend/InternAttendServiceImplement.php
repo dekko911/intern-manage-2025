@@ -66,22 +66,45 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
 
             $status = $this->request->enum('status', CheckAttendStatus::class);
 
-            if ($status === CheckAttendStatus::SAKIT || $status === CheckAttendStatus::IJIN || $status === CheckAttendStatus::ALPA) {
-                $data = $this->mainRepository->create([
-                    'user_id' => $this->request->user_id, // inget ubah
-                    'status' => $status,
-                    'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
-                    'jam_masuk' => "-",
-                    'jam_keluar' => $this->request->jam_keluar ?? "-",
-                ]);
-            } else {
-                $data = $this->mainRepository->create([
-                    'user_id' => $this->request->user_id, // inget ubah
-                    'status' => $status,
-                    'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
-                    'jam_masuk' => now('Asia/Kuala_Lumpur')->toTimeString(),
-                    'jam_keluar' => $this->request->jam_keluar ?? "-",
-                ]);
+            switch (Auth::user()->role) {
+                case 'admin':
+                    $data = $this->mainRepository->create([
+                        'user_id' => $this->request->user_id,
+                        'status' => $status,
+                        'tanggal' => $this->request->tanggal,
+                        'jam_masuk' => $this->request->jam_masuk,
+                        'jam_keluar' => $this->request->jam_keluar ?? "-",
+                    ]);
+                    break;
+                case 'staff':
+                    $data = $this->mainRepository->create([
+                        'user_id' => $this->request->user_id,
+                        'status' => $status,
+                        'tanggal' => $this->request->tanggal,
+                        'jam_masuk' => $this->request->jam_masuk,
+                        'jam_keluar' => $this->request->jam_keluar ?? "-",
+                    ]);
+                    break;
+                case 'intern':
+                    if ($status === CheckAttendStatus::SAKIT || $status === CheckAttendStatus::IJIN || $status === CheckAttendStatus::ALPA) {
+                        $data = $this->mainRepository->create([
+                            'user_id' => Auth::id(), // inget ubah
+                            'status' => $status,
+                            'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
+                            'jam_masuk' => "-",
+                            'jam_keluar' => $this->request->jam_keluar ?? "-",
+                        ]);
+                    } else {
+                        $data = $this->mainRepository->create([
+                            'user_id' => Auth::id(), // inget ubah
+                            'status' => $status,
+                            'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
+                            'jam_masuk' => now('Asia/Kuala_Lumpur')->toTimeString(),
+                            'jam_keluar' => $this->request->jam_keluar ?? "-",
+                        ]);
+                    }
+                    break;
+                default;
             }
 
             return $this->setCode(200)
@@ -92,7 +115,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
         }
     }
 
-    public function updateAttend()
+    public function updateAttend($id)
     {
         try {
             $this->request->validate([
@@ -104,7 +127,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
 
             $status = $this->request->enum('status', CheckAttendStatus::class);
 
-            $data = $this->mainRepository->updateAttend([
+            $data = $this->mainRepository->update($id, [
                 'user_id' => $this->request->user_id,
                 'status' => $status,
                 'tanggal' => $this->request->tanggal,

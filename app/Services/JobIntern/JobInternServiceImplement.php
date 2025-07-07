@@ -68,14 +68,37 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                 'deadline' => ['nullable'],
             ]);
 
-            $data = $this->mainRepository->create([
-                'user_id' => $this->request->user_id, // inget ubah
-                'created' => today('Asia/Kuala_Lumpur')->toDateString(),
-                'task' => $this->request->task,
-                'description' => $this->request->description,
-                'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
-                'status' => CheckJobStatus::PENDING,
-            ]);
+            $status = $this->request->enum('status', CheckJobStatus::class);
+
+            match (Auth::user()->role) {
+                'admin' =>
+                $data = $this->mainRepository->create([
+                    'user_id' => $this->request->user_id,
+                    'created' => $this->request->created,
+                    'task' => $this->request->task,
+                    'description' => $this->request->description,
+                    'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
+                    'status' => $status,
+                ]),
+                'staff' =>
+                $data = $this->mainRepository->create([
+                    'user_id' => $this->request->user_id, // inget ubah
+                    'created' => today('Asia/Kuala_Lumpur')->toDateString(),
+                    'task' => $this->request->task,
+                    'description' => $this->request->description,
+                    'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
+                    'status' => CheckJobStatus::PENDING,
+                ]),
+                'intern' =>
+                $data = $this->mainRepository->create([
+                    'user_id' => Auth::id(), // inget ubah
+                    'created' => today('Asia/Kuala_Lumpur')->toDateString(),
+                    'task' => $this->request->task,
+                    'description' => $this->request->description,
+                    'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
+                    'status' => CheckJobStatus::PENDING,
+                ]),
+            };
 
             return $this->setCode(200)
                 ->setMessage("$this->title_job $this->create_message_job!")
@@ -85,7 +108,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
         }
     }
 
-    public function updateInternJob()
+    public function updateInternJob($id)
     {
         try {
             $this->request->validate([
@@ -97,7 +120,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
 
             $status = $this->request->enum('status', CheckJobStatus::class);
 
-            $data = $this->mainRepository->updateInternJob([
+            $data = $this->mainRepository->update($id, [
                 'user_id' => $this->request->user_id,
                 'created' => $this->request->created,
                 'task' => $this->request->task,
@@ -106,7 +129,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
             ]);
 
             if ($this->request->status) {
-                $data = $this->mainRepository->updateInternJob(['status' => $status]);
+                $data = $this->mainRepository->update($id, ['status' => $status]);
             }
 
             return $this->setCode(200)

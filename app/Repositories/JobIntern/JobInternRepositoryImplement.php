@@ -34,9 +34,4 @@ class JobInternRepositoryImplement extends Eloquent implements JobInternReposito
             }
         })->get();
     }
-
-    public function updateInternJob(array $attributes)
-    {
-        return $this->model->update($attributes);
-    }
 }
