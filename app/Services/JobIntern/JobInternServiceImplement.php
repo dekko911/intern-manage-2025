@@ -5,6 +5,7 @@ namespace App\Services\JobIntern;
 use App\Enums\CheckJobStatus;
 use LaravelEasyRepository\ServiceApi;
 use App\Repositories\JobIntern\JobInternRepository;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +15,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
      * set title message api for CRUD
      * @param string $title
      */
-    protected string $title_job = "data";
+    protected string $title_job = "Data";
     protected string $create_message_job = "berhasil dibuat";
     protected string $update_message_job = "berhasil diubah";
     protected string $delete_message_job = "berhasil dihapus";
@@ -62,7 +63,6 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
     {
         try {
             $this->request->validate([
-                'created' => ['required'],
                 'task' => ['required'],
                 'description' => ['required'],
                 'deadline' => ['nullable'],
@@ -70,15 +70,15 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
 
             $data = $this->mainRepository->create([
                 'user_id' => $this->request->user_id, // inget ubah
-                'created' => $this->request->created,
+                'created' => today('Asia/Kuala_Lumpur')->toDateString(),
                 'task' => $this->request->task,
                 'description' => $this->request->description,
-                'deadline' => $this->request->deadline ?? null, // cari alternative nya, jangan pakai null.
+                'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
                 'status' => CheckJobStatus::PENDING,
             ]);
 
             return $this->setCode(200)
-                ->setMessage("$this->title $this->create_message_job!")
+                ->setMessage("$this->title_job $this->create_message_job!")
                 ->setData($data);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);
@@ -110,7 +110,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
             }
 
             return $this->setCode(200)
-                ->setMessage("$this->title $this->update_message_job!")
+                ->setMessage("$this->title_job $this->update_message_job!")
                 ->setData($data);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);
@@ -122,7 +122,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
         try {
             $data = $this->mainRepository->delete($id);
             return $this->setCode(200)
-                ->setMessage("$this->title $this->delete_message_job!")
+                ->setMessage("$this->title_job $this->delete_message_job!")
                 ->setData($data);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);

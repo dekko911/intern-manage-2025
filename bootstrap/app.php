@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->redirectGuestsTo(fn() => abort(401));
 
+        $middleware->encryptCookies();
+
+        $middleware->trustHosts();
+
         $middleware->statefulApi();
 
         $middleware->alias([

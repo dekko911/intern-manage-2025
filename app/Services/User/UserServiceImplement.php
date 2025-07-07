@@ -76,10 +76,9 @@ class UserServiceImplement extends ServiceApi implements UserService
             ]);
 
             if ($this->file) {
-                $extension = $this->file->extension();
-                $fileName = Str::random(10) . '.' . $extension;
+                $fileName = Str::random(70);
 
-                $this->file->storeAs('images/profile', $fileName, 'public');
+                $this->file->storeAs('img/avt', $fileName, 'public');
             }
 
             $data = $this->mainRepository->create([
@@ -115,27 +114,23 @@ class UserServiceImplement extends ServiceApi implements UserService
             if ($this->file) {
                 // delete the old file when is available at directory,
                 if ($updateFile->photo) {
-                    Storage::disk('public')->delete("images/profile/$updateFile->photo");
+                    Storage::disk('public')->delete("img/avt/$updateFile->photo");
                 }
 
                 // and store the new one.
-                $extension = $this->file->extension();
-                $fileName = Str::random(10) . '.' . $extension;
+                $fileName = Str::random(70);
 
-                $this->file->storeAs('images/profile', $fileName, 'public');
+                $this->file->storeAs('img/avt', $fileName, 'public');
             }
 
             $data = $this->mainRepository->update($id, [
                 'name' => $this->request->name,
                 'email' => $this->request->email,
+                'role' => $this->request->role,
             ]);
 
             if ($this->request->password) {
                 $data = $this->mainRepository->update($id, ['password' => $this->request->password]);
-            }
-
-            if ($this->request->role) {
-                $data = $this->mainRepository->update($id, ['role' => $this->request->role]);
             }
 
             if ($this->request->photo) {
@@ -156,7 +151,7 @@ class UserServiceImplement extends ServiceApi implements UserService
             $deleteFile = $this->mainRepository->findOrFail($id);
 
             if ($deleteFile->photo) {
-                Storage::disk('public')->delete("images/profile/$deleteFile->photo");
+                Storage::disk('public')->delete("img/avt/$deleteFile->photo");
             }
 
             $data = $this->mainRepository->delete($id);

@@ -62,20 +62,27 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
         try {
             $this->request->validate([
                 'status' => ['required', new Enum(CheckAttendStatus::class)],
-                'tanggal' => ['required'],
-                'jam_masuk' => ['required'],
-                'jam_keluar' => ['required'],
             ]);
 
             $status = $this->request->enum('status', CheckAttendStatus::class);
 
-            $data = $this->mainRepository->create([
-                'user_id' => $this->request->user_id, // inget ubah
-                'status' => $status,
-                'tanggal' => $this->request->tanggal,
-                'jam_masuk' => $this->request->jam_masuk ?? null, // alternative waktu.
-                'jam_keluar' => $this->request->jam_keluar ?? null, // alternative waktu.
-            ]);
+            if ($status === CheckAttendStatus::SAKIT || $status === CheckAttendStatus::IJIN || $status === CheckAttendStatus::ALPA) {
+                $data = $this->mainRepository->create([
+                    'user_id' => $this->request->user_id, // inget ubah
+                    'status' => $status,
+                    'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
+                    'jam_masuk' => "-",
+                    'jam_keluar' => $this->request->jam_keluar ?? "-",
+                ]);
+            } else {
+                $data = $this->mainRepository->create([
+                    'user_id' => $this->request->user_id, // inget ubah
+                    'status' => $status,
+                    'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
+                    'jam_masuk' => now('Asia/Kuala_Lumpur')->toTimeString(),
+                    'jam_keluar' => $this->request->jam_keluar ?? "-",
+                ]);
+            }
 
             return $this->setCode(200)
                 ->setMessage("$this->title_intern $this->create_message_intern!")
@@ -101,8 +108,8 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                 'user_id' => $this->request->user_id,
                 'status' => $status,
                 'tanggal' => $this->request->tanggal,
-                'jam_masuk' => $this->request->jam_masuk ?? null, // cari alternativenya.
-                'jam_keluar' => $this->request->jam_keluar ?? null, // cari alternativenya, terkait dengan function waktu.
+                'jam_masuk' => $this->request->jam_masuk,
+                'jam_keluar' => $this->request->jam_keluar ?? now('Asia/Kuala_Lumpur')->toTimeString(),
             ]);
 
             return $this->setCode(200)
