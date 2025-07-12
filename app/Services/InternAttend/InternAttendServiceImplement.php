@@ -86,23 +86,22 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                     ]);
                     break;
                 case 'intern':
-                    if ($status === CheckAttendStatus::SAKIT || $status === CheckAttendStatus::IJIN || $status === CheckAttendStatus::ALPA) {
+                    $status === CheckAttendStatus::SAKIT || $status === CheckAttendStatus::IJIN || $status === CheckAttendStatus::ALPA ?
                         $data = $this->mainRepository->create([
                             'user_id' => Auth::id(), // inget ubah
                             'status' => $status,
                             'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
                             'jam_masuk' => "-",
                             'jam_keluar' => $this->request->jam_keluar ?? "-",
-                        ]);
-                    } else {
+                        ])
+                        :
                         $data = $this->mainRepository->create([
                             'user_id' => Auth::id(), // inget ubah
                             'status' => $status,
                             'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
                             'jam_masuk' => now('Asia/Kuala_Lumpur')->toTimeString(),
-                            'jam_keluar' => $this->request->jam_keluar ?? "-",
+                            'jam_keluar' => $this->request->jam_keluar ?? "-", // alih alternative ne
                         ]);
-                    }
                     break;
                 default;
             }

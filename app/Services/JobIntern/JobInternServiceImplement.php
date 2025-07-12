@@ -87,7 +87,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                     'task' => $this->request->task,
                     'description' => $this->request->description,
                     'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
-                    'status' => CheckJobStatus::PENDING,
+                    'status' => CheckJobStatus::PENDING, // jaga" line ini, bakal diganti pakai enum PROGRESS
                 ]),
                 'intern' =>
                 $data = $this->mainRepository->create([
@@ -96,7 +96,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                     'task' => $this->request->task,
                     'description' => $this->request->description,
                     'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
-                    'status' => CheckJobStatus::PENDING,
+                    'status' => CheckJobStatus::PENDING, // jaga" line ini, bakal diganti pakai enum PROGRESS
                 ]),
             };
 
