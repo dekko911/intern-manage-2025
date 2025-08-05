@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- *
+ * 
  *
  * @property string $id
  * @property string $name
@@ -44,6 +44,8 @@ use LaravelEasyRepository\Traits\GenUid;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhoto($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRole($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CallOfDuty> $call_of_duties
+ * @property-read int|null $call_of_duties_count
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -95,5 +97,10 @@ class User extends Authenticatable
     public function job_interns()
     {
         return $this->hasMany(JobIntern::class, 'user_id', 'id');
+    }
+
+    public function call_of_duties()
+    {
+        return $this->hasMany(CallOfDuty::class, 'user_id', 'id');
     }
 }

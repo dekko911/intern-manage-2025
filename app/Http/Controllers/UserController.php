@@ -5,10 +5,16 @@ namespace App\Http\Controllers;
 use App\Services\User\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+// This Was Called Cast (change the first type variable to actual type variable), yeah i think that's definition.
+// $numberString = "1234567890";
+// $numberToInt = (int) $numberString;
+// echo gettype($numberToInt);
 
 class UserController extends Controller
 {
-    protected $userService;
+    private $userService;
 
     public function __construct(UserService $userService)
     {

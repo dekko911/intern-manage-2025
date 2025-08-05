@@ -15,17 +15,17 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
      * set title message api for CRUD
      * @param string $title
      */
-    protected string $title_intern = "Absen";
-    protected string $create_message_intern = "berhasil dibuat";
-    protected string $update_message_intern = "berhasil diubah";
-    protected string $delete_message_intern = "berhasil dihapus";
+    private string $title_intern = "Absen";
+    private string $create_message_intern = "berhasil dibuat";
+    private string $update_message_intern = "berhasil diubah";
+    private string $delete_message_intern = "berhasil dihapus";
 
     /**
      * don't change $this->mainRepository variable name
      * because used in extends service class
      */
     protected InternAttendRepository $mainRepository;
-    protected Request $request;
+    private Request $request;
 
     public function __construct(InternAttendRepository $mainRepository, Request $request)
     {
@@ -88,7 +88,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                 case 'intern':
                     $status === CheckAttendStatus::SAKIT || $status === CheckAttendStatus::IJIN || $status === CheckAttendStatus::ALPA ?
                         $data = $this->mainRepository->create([
-                            'user_id' => Auth::id(), // inget ubah
+                            'user_id' => Auth::id(), // ingat ubah
                             'status' => $status,
                             'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
                             'jam_masuk' => "-",
@@ -96,7 +96,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                         ])
                         :
                         $data = $this->mainRepository->create([
-                            'user_id' => Auth::id(), // inget ubah
+                            'user_id' => Auth::id(), // ingat ubah
                             'status' => $status,
                             'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
                             'jam_masuk' => now('Asia/Kuala_Lumpur')->toTimeString(),

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class InternAttendController extends Controller
 {
-    protected $internAttendService;
+    private $internAttendService;
 
     public function __construct(InternAttendService $internAttendService)
     {

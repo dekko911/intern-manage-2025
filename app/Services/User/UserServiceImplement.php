@@ -14,10 +14,10 @@ class UserServiceImplement extends ServiceApi implements UserService
      * Set title message api for CRUD.
      * @param string $title
      */
-    protected string $title_user = "User";
-    protected string $create_message_user = "berhasil dibuat";
-    protected string $update_message_user = "berhasil diubah";
-    protected string $delete_message_user = "berhasil dihapus";
+    private string $title_user = "User";
+    private string $create_message_user = "berhasil dibuat";
+    private string $update_message_user = "berhasil diubah";
+    private string $delete_message_user = "berhasil dihapus";
 
     /**
      * Don't change $this->mainRepository variable name,
@@ -25,9 +25,9 @@ class UserServiceImplement extends ServiceApi implements UserService
      */
     protected UserRepository $mainRepository;
 
-    protected Request $request;
+    private Request $request;
 
-    protected $file;
+    private $file;
 
     public function __construct(UserRepository $mainRepository, Request $request)
     {
@@ -36,7 +36,7 @@ class UserServiceImplement extends ServiceApi implements UserService
         $this->file = $request->file('photo');
     }
 
-    // SEMUA LOGIC YANG BIASA DIGUNAKAN DENGAN BAHASA PEMROGRAMAN YAITU BUSINESS LOGIC, IMPLEMENTASIKAN DISINI !!!!!!!!
+    // SEMUA LOGIC YANG BIASA DIGUNAKAN DENGAN BAHASA PEMROGRAMAN YAITU BUSINESS LOGIC, IMPLEMENTASIKAN DI SINI !!!!!!!!
 
     public function getDataUser()
     {
@@ -86,7 +86,7 @@ class UserServiceImplement extends ServiceApi implements UserService
                 'email' => $this->request->email,
                 'password' => $this->request->password,
                 'role' => $this->request->role,
-                'photo' => $fileName ?? "-",
+                'photo' => $fileName ?? '-',
             ]);
 
             return $this->setCode(200)

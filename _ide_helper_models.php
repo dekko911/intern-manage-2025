@@ -15,6 +15,18 @@ namespace App\Models{
 /**
  * 
  *
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallOfDuty newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallOfDuty newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallOfDuty query()
+ */
+	class CallOfDuty extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
  * @property string $id
  * @property string $user_id
  * @property CheckAttendStatus $status
@@ -141,6 +153,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhoto($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRole($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CallOfDuty> $call_of_duties
+ * @property-read int|null $call_of_duties_count
  */
 	class User extends \Eloquent {}
 }

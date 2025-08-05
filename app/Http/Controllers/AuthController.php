@@ -20,7 +20,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $user = User::where('email', $request->email)->first();
 
-            $token = $user->createToken($user->name, [$user->role], now('Asia/Kuala_Lumpur')->addHours(6));
+            $token = $user->createToken($user->name, (array) $user->role, now('Asia/Kuala_Lumpur')->addHours(6));
 
             return response()->json([
                 'status' => 'success',
@@ -29,7 +29,7 @@ class AuthController extends Controller
             ]);
         }
 
-        // if user has not match with their crendentials, return this.
+        // if user has not match with their credentials, return this.
         return response()->json([
             'status' => 'fail',
             'message' => 'Wrong Email or Password !',

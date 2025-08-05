@@ -6,7 +6,7 @@ use Laravel\Sanctum\Sanctum;
 test('task list can be retrieved', function () {
     Sanctum::actingAs(
         User::factory()->create(),
-        ['view-tasks']
+        ['*']
     );
 
     $response = $this->get('/api/task');

@@ -74,7 +74,7 @@ return [
     */
 
     'links' => [
-        public_path('d-custs') => storage_path('app/public'),
+        public_path('d-custs') => storage_path('app/public'), // jak ne inget ubah amun ade nge custom adan 'storage' sebelum ne.
     ],
 
 ];

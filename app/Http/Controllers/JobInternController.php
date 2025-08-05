@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class JobInternController extends Controller
 {
-    protected $jobInternService;
+    private $jobInternService;
 
     public function __construct(JobInternService $jobInternService)
     {

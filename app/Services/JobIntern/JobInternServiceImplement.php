@@ -15,11 +15,10 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
      * set title message api for CRUD
      * @param string $title
      */
-    protected string $title_job = "Data";
-    protected string $create_message_job = "berhasil dibuat";
-    protected string $update_message_job = "berhasil diubah";
-    protected string $delete_message_job = "berhasil dihapus";
-
+    private string $title_job = "Data";
+    private string $create_message_job = "berhasil dibuat";
+    private string $update_message_job = "berhasil diubah";
+    private string $delete_message_job = "berhasil dihapus";
 
     /**
      * don't change $this->mainRepository variable name
@@ -27,7 +26,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
      */
     protected JobInternRepository $mainRepository;
 
-    protected Request $request;
+    private Request $request;
 
     public function __construct(JobInternRepository $mainRepository, Request $request)
     {
@@ -82,7 +81,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                 ]),
                 'staff' =>
                 $data = $this->mainRepository->create([
-                    'user_id' => $this->request->user_id, // inget ubah
+                    'user_id' => $this->request->user_id, // ingat ubah
                     'created' => today('Asia/Kuala_Lumpur')->toDateString(),
                     'task' => $this->request->task,
                     'description' => $this->request->description,
@@ -91,7 +90,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                 ]),
                 'intern' =>
                 $data = $this->mainRepository->create([
-                    'user_id' => Auth::id(), // inget ubah
+                    'user_id' => Auth::id(), // ingat ubah
                     'created' => today('Asia/Kuala_Lumpur')->toDateString(),
                     'task' => $this->request->task,
                     'description' => $this->request->description,
