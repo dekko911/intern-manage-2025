@@ -84,6 +84,7 @@ class UserServiceImplement extends ServiceApi implements UserService
             $data = $this->mainRepository->create([
                 'name' => $this->request->name,
                 'email' => $this->request->email,
+                'date' => today('Asia/Kuala_Lumpur')->isoFormat('DD MMMM Y'),
                 'password' => $this->request->password,
                 'role' => $this->request->role,
                 'photo' => $fileName ?? '-',
@@ -126,6 +127,7 @@ class UserServiceImplement extends ServiceApi implements UserService
             $data = $this->mainRepository->update($id, [
                 'name' => $this->request->name,
                 'email' => $this->request->email,
+                'date' => today('Asia/Kuala_Lumpur')->isoFormat('DD MMMM Y'),
                 'role' => $this->request->role,
             ]);
 
@@ -148,13 +150,18 @@ class UserServiceImplement extends ServiceApi implements UserService
     public function deleteUserById($id)
     {
         try {
-            $deleteFile = $this->mainRepository->findOrFail($id);
+            $getUserId = $this->mainRepository->findOrFail($id);
 
-            if ($deleteFile->photo) {
-                Storage::disk('public')->delete("img/avt/$deleteFile->photo");
+            if ($getUserId->role === "admin") {
+                throw new \Exception("Dilarang menghapus user admin!");
+            }
+
+            if ($getUserId->photo) {
+                Storage::disk('public')->delete("img/avt/$getUserId->photo");
             }
 
             $data = $this->mainRepository->delete($id);
+
             return $this->setCode(200)
                 ->setMessage("$this->title_user $this->delete_message_user!")
                 ->setData($data);

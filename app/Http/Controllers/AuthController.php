@@ -31,8 +31,8 @@ class AuthController extends Controller
 
         // if user has not match with their credentials, return this.
         return response()->json([
-            'status' => 'fail',
+            'status' => 'failed',
             'message' => 'Wrong Email or Password !',
-        ]);
+        ], 401);
     }
 }

@@ -88,7 +88,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                 case 'intern':
                     $status === CheckAttendStatus::SAKIT || $status === CheckAttendStatus::IJIN || $status === CheckAttendStatus::ALPA ?
                         $data = $this->mainRepository->create([
-                            'user_id' => Auth::id(), // ingat ubah
+                            'user_id' => Auth::id(),
                             'status' => $status,
                             'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
                             'jam_masuk' => "-",
@@ -96,11 +96,11 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                         ])
                         :
                         $data = $this->mainRepository->create([
-                            'user_id' => Auth::id(), // ingat ubah
+                            'user_id' => Auth::id(),
                             'status' => $status,
                             'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
                             'jam_masuk' => now('Asia/Kuala_Lumpur')->toTimeString(),
-                            'jam_keluar' => $this->request->jam_keluar ?? "-", // alih alternative ne
+                            'jam_keluar' => $this->request->jam_keluar ?? "-",
                         ]);
                     break;
                 default;
@@ -131,7 +131,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                 'status' => $status,
                 'tanggal' => $this->request->tanggal,
                 'jam_masuk' => $this->request->jam_masuk,
-                'jam_keluar' => $this->request->jam_keluar ?? now('Asia/Kuala_Lumpur')->toTimeString(),
+                'jam_keluar' => $this->request->jam_keluar,
             ]);
 
             return $this->setCode(200)
@@ -146,6 +146,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
     {
         try {
             $data = $this->mainRepository->delete($id);
+
             return $this->setCode(200)
                 ->setMessage("$this->title_intern $this->delete_message_intern!")
                 ->setData($data);

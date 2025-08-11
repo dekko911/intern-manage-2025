@@ -15,10 +15,21 @@ namespace App\Models{
 /**
  * 
  *
- * @property-read \App\Models\User|null $user
+ * @property string $id
+ * @property string $user_id
+ * @property string $days
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CallOfDuty newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CallOfDuty newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CallOfDuty query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallOfDuty whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallOfDuty whereDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallOfDuty whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallOfDuty whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallOfDuty whereUserId($value)
+ * @mixin \Eloquent
  */
 	class CallOfDuty extends \Eloquent {}
 }
@@ -123,6 +134,7 @@ namespace App\Models{
  * @property string $id
  * @property string $name
  * @property string $email
+ * @property string $date
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string $role
@@ -134,6 +146,8 @@ namespace App\Models{
  * @property-read int|null $intern_attends_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\JobIntern> $job_interns
  * @property-read int|null $job_interns_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CallOfDuty> $call_of_duties
+ * @property-read int|null $call_of_duties_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PersonalAccessToken> $tokens
@@ -152,9 +166,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhoto($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRole($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereDate($value)
  * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CallOfDuty> $call_of_duties
- * @property-read int|null $call_of_duties_count
  */
 	class User extends \Eloquent {}
 }

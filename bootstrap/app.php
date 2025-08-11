@@ -16,6 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->redirectGuestsTo(fn() => abort(401));
 
+        $middleware->throttleApi();
+
         $middleware->statefulApi();
 
         $middleware->validateCsrfTokens();

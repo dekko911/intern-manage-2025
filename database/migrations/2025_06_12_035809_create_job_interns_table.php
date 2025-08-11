@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('job_interns', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->unique()->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->date('created');
+            $table->string('created');
             $table->string('task');
             $table->text('description');
             $table->date('deadline')->nullable();

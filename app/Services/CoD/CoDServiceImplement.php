@@ -13,9 +13,9 @@ class CoDServiceImplement extends ServiceApi implements CoDService
      * @param string $title
      */
     private string $title_cod = "Data";
-    private string $create_message_cod = "berhasil dibuat!";
-    private string $update_message_cod = "berhasil diubah!";
-    private string $delete_message_cod = "berhasil dihapus!";
+    private string $create_message_cod = "berhasil dibuat";
+    private string $update_message_cod = "berhasil diubah";
+    private string $delete_message_cod = "berhasil dihapus";
 
     /**
      * don't change $this->mainRepository variable name
@@ -60,12 +60,15 @@ class CoDServiceImplement extends ServiceApi implements CoDService
     public function createCoD()
     {
         try {
-            $validated = $this->request->validate([
+            $this->request->validate([
                 'user_id' => ['required'],
                 'days' => ['required'],
             ]);
 
-            $data = $this->mainRepository->create($validated);
+            $data = $this->mainRepository->create([
+                'user_id' => $this->request->user_id,
+                'days' => $this->request->days ?? today('Asia/Kuala_Lumpur')->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('l'),
+            ]);
 
             return $this->setCode(200)
                 ->setMessage("$this->title_cod $this->create_message_cod!")

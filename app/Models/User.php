@@ -10,11 +10,12 @@ use Laravel\Sanctum\HasApiTokens;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $name
  * @property string $email
+ * @property string $date
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string $role
@@ -26,6 +27,8 @@ use LaravelEasyRepository\Traits\GenUid;
  * @property-read int|null $intern_attends_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\JobIntern> $job_interns
  * @property-read int|null $job_interns_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CallOfDuty> $call_of_duties
+ * @property-read int|null $call_of_duties_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PersonalAccessToken> $tokens
@@ -44,8 +47,7 @@ use LaravelEasyRepository\Traits\GenUid;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhoto($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRole($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CallOfDuty> $call_of_duties
- * @property-read int|null $call_of_duties_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereDate($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -61,6 +63,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'date',
         'password',
         'role',
         'photo',

@@ -73,7 +73,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                 'admin' =>
                 $data = $this->mainRepository->create([
                     'user_id' => $this->request->user_id,
-                    'created' => $this->request->created,
+                    'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
                     'task' => $this->request->task,
                     'description' => $this->request->description,
                     'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
@@ -82,7 +82,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                 'staff' =>
                 $data = $this->mainRepository->create([
                     'user_id' => $this->request->user_id, // ingat ubah
-                    'created' => today('Asia/Kuala_Lumpur')->toDateString(),
+                    'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
                     'task' => $this->request->task,
                     'description' => $this->request->description,
                     'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
@@ -91,10 +91,10 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                 'intern' =>
                 $data = $this->mainRepository->create([
                     'user_id' => Auth::id(), // ingat ubah
-                    'created' => today('Asia/Kuala_Lumpur')->toDateString(),
+                    'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
                     'task' => $this->request->task,
                     'description' => $this->request->description,
-                    'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
+                    'deadline' => CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
                     'status' => CheckJobStatus::PENDING, // jaga" line ini, bakal diganti pakai enum PROGRESS
                 ]),
             };
@@ -111,7 +111,6 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
     {
         try {
             $this->request->validate([
-                'created' => ['required'],
                 'task' => ['required'],
                 'description' => ['required'],
                 'deadline' => ['required'],
@@ -121,7 +120,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
 
             $data = $this->mainRepository->update($id, [
                 'user_id' => $this->request->user_id,
-                'created' => $this->request->created,
+                'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
                 'task' => $this->request->task,
                 'description' => $this->request->description,
                 'deadline' => $this->request->deadline,
@@ -143,6 +142,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
     {
         try {
             $data = $this->mainRepository->delete($id);
+
             return $this->setCode(200)
                 ->setMessage("$this->title_job $this->delete_message_job!")
                 ->setData($data);
