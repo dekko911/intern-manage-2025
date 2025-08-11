@@ -36,7 +36,9 @@ class PDFController extends Controller
 
         $pdf = Pdf::loadView('pdf/myPDF', $data);
 
-        $fileName = 'Absensi Magang-' . today('Asia/Kuala_Lumpur')->toDateString() . '.pdf';
+        $internName = InternAttend::where('user_id', $userId)->first()->user?->name;
+
+        $fileName = 'Absensi Magang ' . (string) $internName . '-' . today('Asia/Kuala_Lumpur')->toDateString() . '.pdf';
         return $pdf->download($fileName);
     }
 }
