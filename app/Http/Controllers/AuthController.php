@@ -17,7 +17,7 @@ class AuthController extends Controller
         ]);
 
         // this for authenticate when user trying to login.
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::attempt((array) $credentials, $request->boolean('remember'))) {
             $user = User::where('email', $request->email)->first();
 
             $token = $user->createToken($user->name, (array) $user->role, now('Asia/Kuala_Lumpur')->addHours(6));

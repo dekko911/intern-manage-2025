@@ -7,14 +7,18 @@
     <title>Absensi Magang {{ today('Asia/Kuala_Lumpur')->year }}</title>
     <style type="text/css">
         @font-face {
-            font-family: "Lora", serif;
+            font-family: "Lato", sans-serif;
             font-style: normal;
             font-optical-sizing: auto;
-            src: url({{ storage_path('fonts/Lora-VariableFont_wght.ttf') }}) format('truetype');
+            src: url({{ storage_path('fonts/Lato-Regular.ttf') }}) format('truetype');
         }
 
         body {
-            font-family: "Lora", serif;
+            font-family: "Lato", sans-serif;
+        }
+
+        p {
+            text-align: center;
         }
 
         h1 {
@@ -42,7 +46,7 @@
 
 <body>
     <h1>{{ $title }}</h1>
-    <p>Bulan: {{ $date }}</p>
+    <h3>Bulan: {{ $month }}</h3>
     <table>
         <thead>
             <tr>
@@ -67,6 +71,7 @@
             @endforeach
         </tbody>
     </table>
+    <p>Laporan dibuat pada: {{ $datetime }} WITA</p>
 </body>
 
 </html>

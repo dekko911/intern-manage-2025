@@ -8,13 +8,19 @@ use Illuminate\Http\Request;
 
 class PDFController extends Controller
 {
+    /**
+     * Generate PDF For All Intern Users.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function generatePDF()
     {
         $attendances = InternAttend::latest('created_at')->with(['user'])->get();
 
         $data = [
             'title' => 'ABSENSI MAGANG ' . today('Asia/Kuala_Lumpur')->year,
-            'date' => today('Asia/Kuala_Lumpur')->isoFormat('MMMM'),
+            'month' => today('Asia/Kuala_Lumpur')->isoFormat('MMMM'),
+            'datetime' => now('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y HH:mm'),
             'attendances' => $attendances,
         ];
 
@@ -24,13 +30,19 @@ class PDFController extends Controller
         return $pdf->download($fileName);
     }
 
+    /**
+     * Generate PDF By User id.
+     *
+     * @param mixed $userId
+     * @return \Illuminate\Http\Response
+     */
     public function generatePDFByUserId($userId)
     {
         $attendances = InternAttend::latest('created_at')->where('user_id', $userId)->with(['user'])->get();
 
         $data = [
             'title' => 'ABSENSI MAGANG ' . today('Asia/Kuala_Lumpur')->year,
-            'date' => today('Asia/Kuala_Lumpur')->isoFormat('MMMM'),
+            'datetime' => now('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y HH:mm'),
             'attendances' => $attendances,
         ];
 
