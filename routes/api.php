@@ -27,7 +27,6 @@ Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:api'])->group(func
 
 Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->group(function () {
     Route::apiResource('users', UserController::class);
-    Route::apiResource('cods', CoDController::class);
     Route::get('/job_intern', [JobInternController::class, 'index']);
     Route::get('/intern_attend', [InternAttendController::class, 'index']);
     Route::post('/job_intern', [JobInternController::class, 'store']);
@@ -40,5 +39,6 @@ Route::middleware(['auth:sanctum', 'ability:intern', 'throttle:api'])->group(fun
     Route::post('/attend_intern', [InternAttendController::class, 'store']);
     Route::get('/intern_job', [JobInternController::class, 'index']);
     Route::post('/intern_job', [JobInternController::class, 'store']);
+    Route::get('/cod', [CoDController::class, 'index']);
 });
 
