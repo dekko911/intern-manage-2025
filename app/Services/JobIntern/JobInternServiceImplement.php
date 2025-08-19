@@ -39,6 +39,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
     {
         try {
             $data = $this->mainRepository->getDataInternJob();
+
             return $this->setCode(200)
                 ->setMessage("OK")
                 ->setData($data);
@@ -51,6 +52,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
     {
         try {
             $data = $this->mainRepository->findOrFail($id);
+
             return $this->setCode(200)
                 ->setMessage("OK")
                 ->setData($data);
@@ -166,7 +168,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
             }
 
             if ($id) {
-                TempJobIntern::where('job_intern_id', $id)->first()->delete();
+                TempJobIntern::where('job_intern_id', $id)->delete();
 
                 TempJobIntern::create([
                     'job_intern_id' => $id,
