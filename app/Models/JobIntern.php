@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $user_id
@@ -43,7 +43,7 @@ class JobIntern extends Model
         'task',
         'description',
         'deadline',
-        'status'
+        'status',
     ];
 
     /**
@@ -61,5 +61,10 @@ class JobIntern extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function temp_job_interns()
+    {
+        return $this->hasMany(JobIntern::class, 'job_intern_id', 'id');
     }
 }

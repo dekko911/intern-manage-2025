@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- *
+ * 
  *
  * @property string $id
  * @property string $name
@@ -29,6 +29,8 @@ use LaravelEasyRepository\Traits\GenUid;
  * @property-read int|null $job_interns_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CallOfDuty> $call_of_duties
  * @property-read int|null $call_of_duties_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TempInternAttend> $temp_intern_attends
+ * @property-read int|null $temp_intern_attends_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PersonalAccessToken> $tokens
@@ -105,5 +107,10 @@ class User extends Authenticatable
     public function call_of_duties()
     {
         return $this->hasMany(CallOfDuty::class, 'user_id', 'id');
+    }
+
+    public function temp_intern_attends()
+    {
+        return $this->hasMany(TempInternAttend::class, 'user_id', 'id');
     }
 }

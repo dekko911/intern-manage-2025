@@ -18,6 +18,8 @@ use LaravelEasyRepository\Traits\GenUid;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TempInternAttend> $temp_intern_attends
+ * @property-read int|null $temp_intern_attends_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|InternAttend newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|InternAttend newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|InternAttend query()
@@ -58,5 +60,10 @@ class InternAttend extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function temp_intern_attends()
+    {
+        return $this->hasMany(TempInternAttend::class, 'user_id', 'id');
     }
 }

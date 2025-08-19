@@ -3,6 +3,7 @@
 namespace App\Services\InternAttend;
 
 use App\Enums\CheckAttendStatus;
+use App\Models\TempInternAttend;
 use LaravelEasyRepository\ServiceApi;
 use App\Repositories\InternAttend\InternAttendRepository;
 use Illuminate\Http\Request;
@@ -37,6 +38,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
     {
         try {
             $data = $this->mainRepository->getDataAttend();
+
             return $this->setCode(200)
                 ->setMessage("OK")
                 ->setData($data);
@@ -49,6 +51,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
     {
         try {
             $data = $this->mainRepository->findOrFail($id);
+
             return $this->setCode(200)
                 ->setMessage("OK")
                 ->setData($data);
@@ -75,6 +78,16 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                         'jam_masuk' => $this->request->jam_masuk,
                         'jam_keluar' => $this->request->jam_keluar ?? "-",
                     ]);
+
+                    TempInternAttend::create([
+                        'intern_attend_id' => $data->id,
+                        'user_id' => $data->user_id,
+                        'status' => $data->status,
+                        'tanggal' => $data->tanggal,
+                        'jam_masuk' => $data->jam_masuk,
+                        'jam_keluar' => $data->jam_keluar,
+                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
+                    ]);
                     break;
                 case 'staff':
                     $data = $this->mainRepository->create([
@@ -84,17 +97,37 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                         'jam_masuk' => $this->request->jam_masuk,
                         'jam_keluar' => $this->request->jam_keluar ?? "-",
                     ]);
+
+                    TempInternAttend::create([
+                        'intern_attend_id' => $data->id,
+                        'user_id' => $data->user_id,
+                        'status' => $data->status,
+                        'tanggal' => $data->tanggal,
+                        'jam_masuk' => $data->jam_masuk,
+                        'jam_keluar' => $data->jam_keluar,
+                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
+                    ]);
                     break;
                 case 'intern':
-                    $status === CheckAttendStatus::SAKIT || $status === CheckAttendStatus::IJIN || $status === CheckAttendStatus::ALPA ?
+                    if ($status === CheckAttendStatus::SAKIT || $status === CheckAttendStatus::IJIN || $status === CheckAttendStatus::ALPA) {
                         $data = $this->mainRepository->create([
                             'user_id' => Auth::id(),
                             'status' => $status,
                             'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
                             'jam_masuk' => "-",
                             'jam_keluar' => $this->request->jam_keluar ?? "-",
-                        ])
-                        :
+                        ]);
+
+                        TempInternAttend::create([
+                            'intern_attend_id' => $data->id,
+                            'user_id' => $data->user_id,
+                            'status' => $data->status,
+                            'tanggal' => $data->tanggal,
+                            'jam_masuk' => $data->jam_masuk,
+                            'jam_keluar' => $data->jam_keluar,
+                            'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
+                        ]);
+                    } else {
                         $data = $this->mainRepository->create([
                             'user_id' => Auth::id(),
                             'status' => $status,
@@ -102,12 +135,23 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                             'jam_masuk' => now('Asia/Kuala_Lumpur')->toTimeString(),
                             'jam_keluar' => $this->request->jam_keluar ?? "-",
                         ]);
+
+                        TempInternAttend::create([
+                            'intern_attend_id' => $data->id,
+                            'user_id' => $data->user_id,
+                            'status' => $data->status,
+                            'tanggal' => $data->tanggal,
+                            'jam_masuk' => $data->jam_masuk,
+                            'jam_keluar' => $data->jam_keluar,
+                            'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
+                        ]);
+                    }
                     break;
                 default;
             }
 
             return $this->setCode(200)
-                ->setMessage("$this->title_intern $this->create_message_intern!")
+                ->setMessage("$this->title_intern $this->create_message_intern & ditandai di temp_intern_attends!")
                 ->setData($data);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);
@@ -134,8 +178,22 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                 'jam_keluar' => $this->request->jam_keluar,
             ]);
 
+            if ($id) {
+                TempInternAttend::where('intern_attend_id', $id)->delete();
+
+                TempInternAttend::create([
+                    'intern_attend_id' => $id,
+                    'user_id' => $this->request->user_id,
+                    'status' => $status,
+                    'tanggal' => $this->request->tanggal,
+                    'jam_masuk' => $this->request->jam_masuk,
+                    'jam_keluar' => $this->request->jam_keluar,
+                    'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
+                ]);
+            }
+
             return $this->setCode(200)
-                ->setMessage("$this->title_intern $this->update_message_intern!")
+                ->setMessage("$this->title_intern $this->update_message_intern & ditandai di temp_intern_attends!")
                 ->setData($data);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);

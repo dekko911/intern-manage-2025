@@ -3,6 +3,7 @@
 namespace App\Services\JobIntern;
 
 use App\Enums\CheckJobStatus;
+use App\Models\TempJobIntern;
 use LaravelEasyRepository\ServiceApi;
 use App\Repositories\JobIntern\JobInternRepository;
 use Carbon\CarbonImmutable;
@@ -69,38 +70,72 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
 
             $status = $this->request->enum('status', CheckJobStatus::class);
 
-            match (Auth::user()->role) {
-                'admin' =>
-                $data = $this->mainRepository->create([
-                    'user_id' => $this->request->user_id,
-                    'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
-                    'task' => $this->request->task,
-                    'description' => $this->request->description,
-                    'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
-                    'status' => $status,
-                ]),
-                'staff' =>
-                $data = $this->mainRepository->create([
-                    'user_id' => $this->request->user_id, // ingat ubah
-                    'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
-                    'task' => $this->request->task,
-                    'description' => $this->request->description,
-                    'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
-                    'status' => CheckJobStatus::PENDING, // jaga" line ini, bakal diganti pakai enum PROGRESS
-                ]),
-                'intern' =>
-                $data = $this->mainRepository->create([
-                    'user_id' => Auth::id(), // ingat ubah
-                    'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
-                    'task' => $this->request->task,
-                    'description' => $this->request->description,
-                    'deadline' => CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
-                    'status' => CheckJobStatus::PENDING, // jaga" line ini, bakal diganti pakai enum PROGRESS
-                ]),
-            };
+            switch (Auth::user()->role) {
+                case 'admin':
+                    $data = $this->mainRepository->create([
+                        'user_id' => $this->request->user_id,
+                        'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
+                        'task' => $this->request->task,
+                        'description' => $this->request->description,
+                        'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
+                        'status' => $status,
+                    ]);
+
+                    TempJobIntern::create([
+                        'job_intern_id' => $data->id,
+                        'user_id' => $data->user_id,
+                        'created' => $data->created,
+                        'task' => $data->task,
+                        'description' => $data->description,
+                        'deadline' => $data->deadline,
+                        'status' => $data->status,
+                    ]);
+                    break;
+                case 'staff':
+                    $data = $this->mainRepository->create([
+                        'user_id' => $this->request->user_id, // ingat ubah
+                        'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
+                        'task' => $this->request->task,
+                        'description' => $this->request->description,
+                        'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
+                        'status' => CheckJobStatus::PENDING, // jaga" line ini, bakal diganti pakai enum PROGRESS
+                    ]);
+
+                    TempJobIntern::create([
+                        'job_intern_id' => $data->id,
+                        'user_id' => $data->user_id,
+                        'created' => $data->created,
+                        'task' => $data->task,
+                        'description' => $data->description,
+                        'deadline' => $data->deadline,
+                        'status' => $data->status,
+                    ]);
+                    break;
+                case 'intern':
+                    $data = $this->mainRepository->create([
+                        'user_id' => Auth::id(), // ingat ubah
+                        'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
+                        'task' => $this->request->task,
+                        'description' => $this->request->description,
+                        'deadline' => CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
+                        'status' => CheckJobStatus::PENDING, // jaga" line ini, bakal diganti pakai enum PROGRESS
+                    ]);
+
+                    TempJobIntern::create([
+                        'job_intern_id' => $data->id,
+                        'user_id' => $data->user_id,
+                        'created' => $data->created,
+                        'task' => $data->task,
+                        'description' => $data->description,
+                        'deadline' => $data->deadline,
+                        'status' => $data->status,
+                    ]);
+                    break;
+                default;
+            }
 
             return $this->setCode(200)
-                ->setMessage("$this->title_job $this->create_message_job!")
+                ->setMessage("$this->title_job $this->create_message_job & ditandai di temp_job_interns!")
                 ->setData($data);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);
@@ -130,8 +165,22 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                 $data = $this->mainRepository->update($id, ['status' => $status]);
             }
 
+            if ($id) {
+                TempJobIntern::where('job_intern_id', $id)->first()->delete();
+
+                TempJobIntern::create([
+                    'job_intern_id' => $id,
+                    'user_id' => $this->request->user_id,
+                    'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
+                    'task' => $this->request->task,
+                    'description' => $this->request->description,
+                    'deadline' => $this->request->deadline,
+                    'status' => $status,
+                ]);
+            }
+
             return $this->setCode(200)
-                ->setMessage("$this->title_job $this->update_message_job!")
+                ->setMessage("$this->title_job $this->update_message_job & ditandai di temp_job_interns!")
                 ->setData($data);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);

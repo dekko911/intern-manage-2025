@@ -5,6 +5,8 @@ use App\Http\Controllers\CoDController;
 use App\Http\Controllers\InternAttendController;
 use App\Http\Controllers\JobInternController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\TempInternAttendController;
+use App\Http\Controllers\TempJobInternController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +29,9 @@ Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:api'])->group(func
 
 Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->group(function () {
     Route::apiResource('users', UserController::class);
+    Route::apiResource('cods', CoDController::class);
+    Route::apiResource('tmp_ias', TempInternAttendController::class);
+    Route::apiResource('tmp_jis', TempJobInternController::class);
     Route::get('/job_intern', [JobInternController::class, 'index']);
     Route::get('/intern_attend', [InternAttendController::class, 'index']);
     Route::post('/job_intern', [JobInternController::class, 'store']);
@@ -35,10 +40,11 @@ Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->grou
 });
 
 Route::middleware(['auth:sanctum', 'ability:intern', 'throttle:api'])->group(function () {
-    Route::get('/attend_intern', [InternAttendController::class, 'index']);
+    Route::get('/generate_pdf', [PDFController::class, 'generatePDF']);
+    Route::get('/generate_pdf/{userId}', [PDFController::class, 'generatePDFByUserId']);
+    Route::apiResource('tmp_ia', TempInternAttendController::class);
+    Route::apiResource('tmp_ji', TempJobInternController::class);
     Route::post('/attend_intern', [InternAttendController::class, 'store']);
-    Route::get('/intern_job', [JobInternController::class, 'index']);
     Route::post('/intern_job', [JobInternController::class, 'store']);
     Route::get('/cod', [CoDController::class, 'index']);
 });
-

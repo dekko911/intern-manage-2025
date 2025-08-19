@@ -47,6 +47,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TempInternAttend> $temp_intern_attends
+ * @property-read int|null $temp_intern_attends_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|InternAttend newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|InternAttend newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|InternAttend query()
@@ -90,6 +92,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|JobIntern whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|JobIntern whereCreated($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, JobIntern> $temp_job_interns
+ * @property-read int|null $temp_job_interns_count
  */
 	class JobIntern extends \Eloquent {}
 }
@@ -132,6 +136,76 @@ namespace App\Models{
  * 
  *
  * @property string $id
+ * @property string $intern_attend_id
+ * @property string $user_id
+ * @property string $status
+ * @property string $tanggal
+ * @property string $jam_masuk
+ * @property string $jam_keluar
+ * @property string|null $expired_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\InternAttend|null $intern_attend
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend whereExpiredAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend whereInternAttendId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend whereJamKeluar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend whereJamMasuk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend whereTanggal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempInternAttend whereUserId($value)
+ * @mixin \Eloquent
+ */
+	class TempInternAttend extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property string $id
+ * @property string $job_intern_id
+ * @property string $user_id
+ * @property string $created
+ * @property string $task
+ * @property string $description
+ * @property string|null $deadline
+ * @property CheckJobStatus|null $status
+ * @property string|null $expired_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\JobIntern $job_intern
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereCreated($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereDeadline($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereExpiredAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereJobInternId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereTask($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereUserId($value)
+ * @mixin \Eloquent
+ */
+	class TempJobIntern extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property string $id
  * @property string $name
  * @property string $email
  * @property string $date
@@ -148,6 +222,8 @@ namespace App\Models{
  * @property-read int|null $job_interns_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CallOfDuty> $call_of_duties
  * @property-read int|null $call_of_duties_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TempInternAttend> $temp_intern_attends
+ * @property-read int|null $temp_intern_attends_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PersonalAccessToken> $tokens
