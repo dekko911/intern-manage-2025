@@ -5,6 +5,7 @@ use App\Http\Controllers\CoDController;
 use App\Http\Controllers\InternAttendController;
 use App\Http\Controllers\JobInternController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TempInternAttendController;
 use App\Http\Controllers\TempJobInternController;
 use App\Http\Controllers\UserController;
@@ -28,6 +29,7 @@ Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:api'])->group(func
 });
 
 Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->group(function () {
+    Route::apiResource('search', SearchController::class);
     Route::apiResource('users', UserController::class);
     Route::apiResource('cods', CoDController::class);
     Route::apiResource('tmp_ias', TempInternAttendController::class);
@@ -40,6 +42,7 @@ Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->grou
 });
 
 Route::middleware(['auth:sanctum', 'ability:intern', 'throttle:api'])->group(function () {
+    Route::apiResource('search', SearchController::class);
     Route::get('/generate_pdf', [PDFController::class, 'generatePDF']);
     Route::get('/generate_pdf/{userId}', [PDFController::class, 'generatePDFByUserId']);
     Route::apiResource('tmp_ia', TempInternAttendController::class);

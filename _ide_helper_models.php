@@ -224,6 +224,8 @@ namespace App\Models{
  * @property-read int|null $call_of_duties_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TempInternAttend> $temp_intern_attends
  * @property-read int|null $temp_intern_attends_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TempJobIntern> $temp_job_interns
+ * @property-read int|null $temp_job_interns_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PersonalAccessToken> $tokens
