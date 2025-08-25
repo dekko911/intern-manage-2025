@@ -18,6 +18,7 @@ class TempJobInternController extends Controller
                     ->orWhere('description', 'like', "%$search%")
                     ->orWhere('deadline', 'like', "%$search%")
                     ->orWhere('status', 'like', "%$search%")
+                    ->orWhere('expired_at', 'like', "%$search%")
                     ->orWhereRelation('user', 'name', 'like', "%$search%");
             }
         })->get();

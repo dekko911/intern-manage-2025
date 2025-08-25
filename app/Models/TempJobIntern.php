@@ -50,6 +50,7 @@ class TempJobIntern extends Model
         'description',
         'deadline',
         'status',
+        'expired_at',
     ];
 
     /**

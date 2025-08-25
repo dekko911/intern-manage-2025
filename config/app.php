@@ -67,6 +67,8 @@ return [
 
     'timezone' => 'UTC',
 
+    'schedule_timezone' => 'Asia/Kuala_Lumpur',
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration

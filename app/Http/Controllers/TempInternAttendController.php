@@ -17,6 +17,7 @@ class TempInternAttendController extends Controller
                     ->orWhere('tanggal', 'like', "%$search%")
                     ->orWhere('jam_masuk', 'like', "%$search%")
                     ->orWhere('jam_keluar', 'like', "%$search%")
+                    ->orWhere('expired_at', 'like', "%$search%")
                     ->orWhereRelation('user', 'name', 'like', "%$search%");
             }
         })->get();

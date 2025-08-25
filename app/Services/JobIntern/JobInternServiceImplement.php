@@ -91,6 +91,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                         'description' => $data->description,
                         'deadline' => $data->deadline,
                         'status' => $data->status,
+                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
                     ]);
                     break;
                 case 'staff':
@@ -111,6 +112,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                         'description' => $data->description,
                         'deadline' => $data->deadline,
                         'status' => $data->status,
+                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
                     ]);
                     break;
                 case 'intern':
@@ -131,6 +133,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                         'description' => $data->description,
                         'deadline' => $data->deadline,
                         'status' => $data->status,
+                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
                     ]);
                     break;
                 default;

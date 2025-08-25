@@ -13,3 +13,6 @@ Schedule::command('app:clear-temp-intern-attends')->weekly();
 
 // for clear table job interns.
 Schedule::command('app:clear-temp-job-interns')->weekly();
+
+// token expiration.
+Schedule::command('sanctum:prune-expired --hours=6')->everySixHours();

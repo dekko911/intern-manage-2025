@@ -19,6 +19,8 @@ use LaravelEasyRepository\Traits\GenUid;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, JobIntern> $temp_job_interns
+ * @property-read int|null $temp_job_interns_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|JobIntern newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|JobIntern newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|JobIntern query()

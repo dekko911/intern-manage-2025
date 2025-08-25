@@ -188,7 +188,6 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                     'tanggal' => $this->request->tanggal,
                     'jam_masuk' => $this->request->jam_masuk,
                     'jam_keluar' => $this->request->jam_keluar,
-                    'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
                 ]);
             }
 
