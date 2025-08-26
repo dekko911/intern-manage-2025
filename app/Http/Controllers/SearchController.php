@@ -9,7 +9,7 @@ class SearchController extends Controller
 {
     private $q;
 
-    private function __construct()
+    public function __construct()
     {
         $this->q = request('search');
     }

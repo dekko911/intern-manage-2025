@@ -43,6 +43,7 @@ class UserServiceImplement extends ServiceApi implements UserService
         try {
             // variable name $data can be replace, example: $users || $roles && etc.
             $data = $this->mainRepository->getDataUser();
+
             return $this->setCode(200)
                 ->setMessage("OK")
                 ->setData($data);
@@ -55,6 +56,7 @@ class UserServiceImplement extends ServiceApi implements UserService
     {
         try {
             $data = $this->mainRepository->findOrFail($id);
+
             return $this->setCode(200)
                 ->setMessage("OK")
                 ->setData($data);
