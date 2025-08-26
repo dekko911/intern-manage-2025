@@ -14,6 +14,7 @@ class JobInternRepositoryImplement extends Eloquent implements JobInternReposito
      * @property Model|mixed $model;
      */
     protected JobIntern $model;
+
     private $search;
 
     public function __construct(JobIntern $model)
@@ -24,14 +25,14 @@ class JobInternRepositoryImplement extends Eloquent implements JobInternReposito
 
     public function getDataInternJob()
     {
-        return $this->model->latest('created_at')->with(['user'])->where(function ($q) {
-            if ($this->search) {
-                $q->where('task', 'like', "%$this->search%")
-                    ->orWhere('created', 'like', "%$this->search%")
-                    ->orWhere('description', 'like', "%$this->search%")
-                    ->orWhere('status', 'like', "%$this->search%")
-                    ->orWhereRelation('user', 'name', 'like', "%$this->search%");
-            }
-        })->get();
+        return $this->model->with(['user'])->when(
+            $this->search,
+            fn($q) =>
+            $q->where('task', 'like', "%$this->search%")
+                ->orWhere('created', 'like', "%$this->search%")
+                ->orWhere('description', 'like', "%$this->search%")
+                ->orWhere('status', 'like', "%$this->search%")
+                ->orWhereRelation('user', 'name', 'like', "%$this->search%")
+        )->orderByRaw("CASE WHEN status = 'Done' THEN 1 ELSE 0 END")->oldest('created_at')->get();
     }
 }

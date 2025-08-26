@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
-    public function profile(Request $r, $id)
+    public function profile(Request $r, $id): JsonResponse
     {
         $profile = User::findOrFail($id);
 

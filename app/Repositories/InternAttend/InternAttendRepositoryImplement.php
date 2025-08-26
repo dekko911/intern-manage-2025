@@ -14,6 +14,7 @@ class InternAttendRepositoryImplement extends Eloquent implements InternAttendRe
      * @property Model|mixed $model;
      */
     protected InternAttend $model;
+
     private $search;
 
     public function __construct(InternAttend $model)
@@ -24,14 +25,14 @@ class InternAttendRepositoryImplement extends Eloquent implements InternAttendRe
 
     public function getDataAttend()
     {
-        return $this->model->latest('created_at')->with(['user'])->where(function ($q) {
-            if ($this->search) {
-                $q->where('status', 'like', "%$this->search%")
-                    ->orWhere('tanggal', 'like', "%$this->search%")
-                    ->orWhere('jam_masuk', 'like', "%$this->search%")
-                    ->orWhere('jam_keluar', 'like', "%$this->search")
-                    ->orWhereRelation('user', 'name', 'like', "%$this->search%");
-            }
-        })->get();
+        return $this->model->latest('created_at')->with(['user'])->when(
+            $this->search,
+            fn($q) =>
+            $q->where('status', 'like', "%$this->search%")
+                ->orWhere('tanggal', 'like', "%$this->search%")
+                ->orWhere('jam_masuk', 'like', "%$this->search%")
+                ->orWhere('jam_keluar', 'like', "%$this->search")
+                ->orWhereRelation('user', 'name', 'like', "%$this->search%")
+        )->get();
     }
 }
