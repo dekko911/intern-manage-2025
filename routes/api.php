@@ -5,6 +5,7 @@ use App\Http\Controllers\CoDController;
 use App\Http\Controllers\InternAttendController;
 use App\Http\Controllers\JobInternController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TempInternAttendController;
 use App\Http\Controllers\TempJobInternController;
@@ -29,6 +30,7 @@ Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:api'])->group(func
 });
 
 Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->group(function () {
+    Route::post('/profile/{id}', [ProfileController::class, 'profile']);
     Route::apiResource('search', SearchController::class);
     Route::apiResource('users', UserController::class);
     Route::apiResource('cods', CoDController::class);
@@ -42,6 +44,7 @@ Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->grou
 });
 
 Route::middleware(['auth:sanctum', 'ability:intern', 'throttle:api'])->group(function () {
+    Route::post('/profile/{id}', [ProfileController::class, 'profile']);
     Route::apiResource('search', SearchController::class);
     Route::get('/generate_pdf', [PDFController::class, 'generatePDF']);
     Route::get('/generate_pdf/{userId}', [PDFController::class, 'generatePDFByUserId']);
