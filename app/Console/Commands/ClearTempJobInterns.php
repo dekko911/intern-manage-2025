@@ -26,12 +26,17 @@ class ClearTempJobInterns extends Command
      */
     public function handle()
     {
-        TempJobIntern::where('expired_at', '<=', now('Asia/Kuala_Lumpur'))->delete();
-        $this->info('Expired temp job interns cleared!');
+        $yearNow = today('Asia/Kuala_Lumpur')->year;
+        $monthNow = today('Asia/Kuala_Lumpur')->month;
+        $weekNumberNow = today('Asia/Kuala_Lumpur')->weekNumberInMonth;
+        $weekDayNow = today('Asia/Kuala_Lumpur')->dayOfWeek;
 
-        // for json. I don't know this gonna work or not.
-        // response()->json([
-        //     'message' => 'Expired temp job interns cleared!',
-        // ]);
+        TempJobIntern::where(
+            'expired_at',
+            '<=',
+            ClearTempInternAttends::getDateFromWeekNumberInMonth($yearNow, $monthNow, $weekNumberNow, $weekDayNow)
+        )->delete();
+
+        $this->info('Expired temp job interns cleared!');
     }
 }

@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('temp_job_interns', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('job_intern_id')->unique()->references('id')->on('job_interns')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignUuid('user_id')->unique()->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignUuid('job_intern_id')->references('id')->on('job_interns')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('created');
             $table->string('task');
             $table->text('description');

@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('intern_attends', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->unique()->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->enum('status', ['Hadir', 'Ijin', 'Sakit', 'Alpa']);
             $table->date('tanggal');
             $table->time('jam_masuk')->nullable();

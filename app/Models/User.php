@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $name

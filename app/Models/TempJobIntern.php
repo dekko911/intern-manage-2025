@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $job_intern_id
@@ -42,6 +42,11 @@ class TempJobIntern extends Model
 {
     use GenUid;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
     protected $fillable = [
         'job_intern_id',
         'user_id',

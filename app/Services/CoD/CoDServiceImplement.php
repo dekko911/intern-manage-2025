@@ -67,7 +67,7 @@ class CoDServiceImplement extends ServiceApi implements CoDService
 
             $data = $this->mainRepository->create([
                 'user_id' => $this->request->user_id,
-                'days' => $this->request->days ?? today('Asia/Kuala_Lumpur')->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('l'),
+                'days' => $this->request->days ?? today('Asia/Kuala_Lumpur')->translatedFormat('l'),
             ]);
 
             return $this->setCode(200)

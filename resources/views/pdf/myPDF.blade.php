@@ -41,11 +41,15 @@
         th {
             background-color: #f2f2f2;
         }
+
+        .page-break {
+            page-break-before: always;
+        }
     </style>
 </head>
 
 <body>
-    <h1>{{ $title }}</h1>
+    <h1>{{ $title_absen }}</h1>
     <h3>Bulan: {{ $month }}</h3>
     <table>
         <thead>
@@ -72,6 +76,28 @@
         </tbody>
     </table>
     <p>Laporan dibuat pada: {{ $datetime }} WITA</p>
+
+    <div class="page-break"></div>
+
+    {{-- Belum selesai, layout masih belum ter rencana di kepala. --}}
+
+    <h1>{{ $title_CoD }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Hari</th>
+                <th>Nama</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($callOfDuties as $item)
+                <tr>
+                    <td>{{ $item->days }}</td>
+                    <td>{{ $item->user?->name }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 </body>
 
 </html>

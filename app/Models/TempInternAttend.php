@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $intern_attend_id
@@ -40,6 +40,11 @@ class TempInternAttend extends Model
 {
     use GenUid;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
     protected $fillable = [
         'intern_attend_id', // ini jangan di tampilkan di halaman dengan role intern; jika di admin, tampilkan.
         'user_id',

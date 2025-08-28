@@ -30,9 +30,9 @@ Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:api'])->group(func
 });
 
 Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->group(function () {
+    Route::apiResource('users', UserController::class);
     Route::post('/profile/{id}', [ProfileController::class, 'profile']);
     Route::apiResource('search', SearchController::class);
-    Route::apiResource('users', UserController::class);
     Route::apiResource('cods', CoDController::class);
     Route::apiResource('tmp_ias', TempInternAttendController::class);
     Route::apiResource('tmp_jis', TempJobInternController::class);

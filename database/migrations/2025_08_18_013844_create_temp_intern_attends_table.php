@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('temp_intern_attends', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('intern_attend_id')->unique()->references('id')->on('intern_attends')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignUuid('user_id')->unique()->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignUuid('intern_attend_id')->references('id')->on('intern_attends')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->enum('status', ['Hadir', 'Ijin', 'Sakit', 'Alpa']);
             $table->date('tanggal');
             $table->time('jam_masuk');
