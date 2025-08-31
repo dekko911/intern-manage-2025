@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('days');
             $table->timestamps();
+            $table->unique(['user_id', 'days']);
         });
     }
 

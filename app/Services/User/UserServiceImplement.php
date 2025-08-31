@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use LaravelEasyRepository\ServiceApi;
 use App\Repositories\User\UserRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class UserServiceImplement extends ServiceApi implements UserService
@@ -77,6 +78,12 @@ class UserServiceImplement extends ServiceApi implements UserService
                 'photo' => ['nullable', 'mimes:png,jpg,webp', 'max:1024'],
             ]);
 
+            if ($this->request->role === 'admin') {
+                if ($this->mainRepository->checkRoleDoubleAdminIfExists()) {
+                    throw new \Exception("Tidak Bisa Tambah User Admin Lagi!");
+                }
+            }
+
             if ($this->file) {
                 $fileName = Str::random(70);
 
@@ -86,7 +93,7 @@ class UserServiceImplement extends ServiceApi implements UserService
             $data = $this->mainRepository->create([
                 'name' => $this->request->name,
                 'email' => $this->request->email,
-                'date' => today('Asia/Kuala_Lumpur')->isoFormat('DD MMMM Y'),
+                'date' => today('Asia/Kuala_Lumpur')->isoFormat('DD MMMM YYYY'),
                 'password' => $this->request->password,
                 'role' => $this->request->role,
                 'photo' => $fileName ?? '-',
@@ -103,6 +110,16 @@ class UserServiceImplement extends ServiceApi implements UserService
     public function updateUser($id)
     {
         try {
+            $getUserId = $this->mainRepository->findOrFail($id);
+
+            // mencari target user menggunakan param $id jika target itu adalah admin.
+            if ($getUserId->role === 'admin') {
+                // jika id yang login tidak sama dengan parameter id, artinya hanya dia saja yang bisa me rubah dirinya sendiri. (si admin maksudnya)
+                if (Auth::id() !== $id) {
+                    throw new \Exception("Dilarang edit user admin selain si admin itu sendiri!");
+                }
+            }
+
             // METHOD SPOOFING like: "_method = PUT || PATCH" <- in params / parameter.
             $this->request->validate([
                 'name' => ['required'],
@@ -111,6 +128,12 @@ class UserServiceImplement extends ServiceApi implements UserService
                 'role' => ['required'],
                 'photo' => ['mimes:png,jpg,webp', 'max:1024'],
             ]);
+
+            if ($this->request->role === 'admin') {
+                if ($this->mainRepository->checkRoleDoubleAdminIfExists()) {
+                    throw new \Exception("Tidak Bisa Tambah User Admin Lagi!");
+                }
+            }
 
             $updateFile = $this->mainRepository->findOrFail($id);
 
@@ -129,7 +152,7 @@ class UserServiceImplement extends ServiceApi implements UserService
             $data = $this->mainRepository->update($id, [
                 'name' => $this->request->name,
                 'email' => $this->request->email,
-                'date' => today('Asia/Kuala_Lumpur')->isoFormat('DD MMMM Y'),
+                'date' => today('Asia/Kuala_Lumpur')->isoFormat('DD MMMM YYYY'),
                 'role' => $this->request->role,
             ]);
 

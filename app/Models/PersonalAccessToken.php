@@ -4,13 +4,12 @@ namespace App\Models;
 
 // use Illuminate\Database\Eloquent\Model;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- *
+ * 
  *
  * @property string $id
  * @property string $tokenable_type

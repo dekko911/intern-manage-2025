@@ -7,4 +7,6 @@ use LaravelEasyRepository\Repository;
 interface UserRepository extends Repository
 {
     public function getDataUser();
+
+    public function checkRoleDoubleAdminIfExists(): bool;
 }

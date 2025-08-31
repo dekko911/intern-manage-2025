@@ -42,6 +42,7 @@ namespace App\Models{
  * @property string $user_id
  * @property CheckAttendStatus $status
  * @property string $tanggal
+ * @property-read string $tanggal_iso
  * @property string|null $jam_masuk
  * @property string|null $jam_keluar
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -72,6 +73,7 @@ namespace App\Models{
  * @property string $id
  * @property string $user_id
  * @property string $created
+ * @property-read string $created_iso
  * @property string $task
  * @property string $description
  * @property string|null $deadline
@@ -140,6 +142,7 @@ namespace App\Models{
  * @property string $user_id
  * @property string $status
  * @property string $tanggal
+ * @property-read string $tanggal_iso
  * @property string $jam_masuk
  * @property string $jam_keluar
  * @property string|null $expired_at
@@ -173,6 +176,7 @@ namespace App\Models{
  * @property string $job_intern_id
  * @property string $user_id
  * @property string $created
+ * @property-read string $created_iso
  * @property string $task
  * @property string $description
  * @property string|null $deadline

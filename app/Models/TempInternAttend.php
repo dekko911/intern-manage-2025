@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\CheckAttendStatus;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use LaravelEasyRepository\Traits\GenUid;
 
@@ -14,6 +15,7 @@ use LaravelEasyRepository\Traits\GenUid;
  * @property string $user_id
  * @property string $status
  * @property string $tanggal
+ * @property-read string $tanggal_iso
  * @property string $jam_masuk
  * @property string $jam_keluar
  * @property string|null $expired_at
@@ -43,7 +45,7 @@ class TempInternAttend extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var list<string>
      */
     protected $fillable = [
         'intern_attend_id', // ini jangan di tampilkan di halaman dengan role intern; jika di admin, tampilkan.
@@ -65,6 +67,16 @@ class TempInternAttend extends Model
         return [
             'status' => CheckAttendStatus::class,
         ];
+    }
+
+    /**
+     * Konversi dari Format tanggal Sistem ke Mudah di baca untuk Manusia. cara panggil method/property nya adalah ambil bagian tengahnya. (get dan Attribute nya, hilangkan; ex: tanggal_iso)
+     *
+     * @return string
+     */
+    public function getTanggalIsoAttribute(): string
+    {
+        return Carbon::parse($this->tanggal)->isoFormat('DD MMMM YYYY');
     }
 
     public function intern_attend()

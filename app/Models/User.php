@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,7 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- *
+ * 
  *
  * @property string $id
  * @property string $name
@@ -95,7 +96,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
     public function intern_attends()
     {
         return $this->hasMany(InternAttend::class, 'user_id', 'id');

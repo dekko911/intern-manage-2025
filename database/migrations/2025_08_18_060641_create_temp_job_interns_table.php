@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->uuid('id')->primary();
             $table->foreignUuid('job_intern_id')->references('id')->on('job_interns')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('created');
+            $table->date('created');
             $table->string('task');
             $table->text('description');
             $table->date('deadline')->nullable();

@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use App\Enums\CheckJobStatus;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $user_id
  * @property string $created
+ * @property-read string $created_iso
  * @property string $task
  * @property string $description
  * @property string|null $deadline
@@ -39,6 +41,11 @@ class JobIntern extends Model
 {
     use GenUid;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     protected $fillable = [
         'user_id',
         'created',
@@ -58,6 +65,16 @@ class JobIntern extends Model
         return [
             'status' => CheckJobStatus::class,
         ];
+    }
+
+    /**
+     * Konversi dari Format tanggal Sistem ke Mudah di baca untuk Manusia. cara panggil method/property nya adalah ambil bagian tengahnya. (get dan Attribute nya, hilangkan; ex: created_iso)
+     *
+     * @return string
+     */
+    public function getCreatedIsoAttribute()
+    {
+        return Carbon::parse($this->created)->isoFormat("dddd, DD MMMM YYYY");
     }
 
     public function user()

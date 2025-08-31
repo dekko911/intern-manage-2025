@@ -5,6 +5,7 @@ namespace App\Repositories\CoD;
 use LaravelEasyRepository\Implementations\Eloquent;
 use App\Models\CallOfDuty;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class CoDRepositoryImplement extends Eloquent implements CoDRepository
 {
@@ -31,5 +32,12 @@ class CoDRepositoryImplement extends Eloquent implements CoDRepository
             $q->where('days', 'like', "%$this->search%")
                 ->orWhereRelation('user', 'name', 'like', "%$this->search%")
         )->get();
+    }
+
+    public function checkDataDoubleCoDIfExists(): bool
+    {
+        return $this->model->where('user_id', Auth::user()->id)
+            ->where('days', today('Asia/Kuala_Lumpur')->translatedFormat('l'))
+            ->exists();
     }
 }

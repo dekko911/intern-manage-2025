@@ -33,4 +33,9 @@ class UserRepositoryImplement extends Eloquent implements UserRepository
                 ->orWhere('role', 'like', "%$this->search%")
         )->get();
     }
+
+    public function checkRoleDoubleAdminIfExists(): bool
+    {
+        return $this->model->where('role', '=', 'admin')->exists();
+    }
 }

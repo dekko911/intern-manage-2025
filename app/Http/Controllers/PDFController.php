@@ -12,12 +12,15 @@ class PDFController extends Controller
 {
     protected int $targetMonth;
 
-    protected int $searchMonth;
+    protected int $searchByMonth;
+
+    protected int $weekNum;
 
     public function __construct()
     {
-        $this->searchMonth = request('m', today('Asia/Kuala_Lumpur')->isoFormat('M'));
+        $this->searchByMonth = request('m', today('Asia/Kuala_Lumpur')->isoFormat('M'));
         $this->targetMonth = today('Asia/Kuala_Lumpur')->month;
+        $this->weekNum = today('Asia/Kuala_Lumpur')->weekNumberInMonth;
     }
 
     /**
@@ -27,16 +30,20 @@ class PDFController extends Controller
      */
     public function generatePDF()
     {
-        $attendances = InternAttend::latest('created_at')
+        $attendances = InternAttend::latest('status')
             ->with(['user'])
-            ->when($this->searchMonth, fn($m) => $m->whereMonth('created_at', $this->searchMonth))
+            ->when(
+                $this->searchByMonth,
+                fn($m) =>
+                $m->whereMonth('created_at', $this->searchByMonth)
+            )
             ->get()
             ->filter(
                 fn($item) =>
                 $item->created_at->month === $this->targetMonth
             );
 
-        $callOfDuties = CallOfDuty::latest('created_at')->with(['user'])->get();
+        $callOfDuties = CallOfDuty::latest('days')->with(['user'])->get()->groupBy('days');
 
         $dataCoD = [
             'title_CoD' => 'PIKET KANTOR HP CREATIVE SPACE ' . today('Asia/Kuala_Lumpur')->year,
@@ -45,14 +52,14 @@ class PDFController extends Controller
 
         $data = [
             'title_absen' => 'ABSENSI MAGANG ' . today('Asia/Kuala_Lumpur')->year,
-            'month' => Carbon::create()->month($this->searchMonth)->translatedFormat('F'),
+            'month' => Carbon::create()->month($this->searchByMonth)->translatedFormat('F'),
             'datetime' => now('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y HH:mm'),
             'attendances' => $attendances,
         ];
 
         $pdf = Pdf::loadView('pdf/myPDF', $data, $dataCoD, 'UTF-8');
 
-        $fileName = 'Absensi Magang-' . today('Asia/Kuala_Lumpur')->toDateString() . '.pdf';
+        $fileName = 'Data Rekap Magang HP Creative Space-' . today('Asia/Kuala_Lumpur')->isoFormat('MMMM Y') . '.pdf';
 
         return $pdf->download($fileName);
     }
@@ -65,17 +72,32 @@ class PDFController extends Controller
      */
     public function generatePDFByUserId($userId)
     {
-        $attendances = InternAttend::latest('created_at')
+        $searchByStatus = request('s');
+
+        $attendances = InternAttend::latest('status')
             ->where('user_id', $userId)
             ->with(['user'])
-            ->when($this->searchMonth, fn($m) => $m->whereMonth('created_at', $this->searchMonth))
+            ->when(
+                $this->searchByMonth,
+                fn($m) =>
+                $m->whereMonth('created_at', $this->searchByMonth)
+            )
+            ->when(
+                $searchByStatus,
+                fn($s) =>
+                $s->whereStatus($searchByStatus)
+            )
             ->get()
             ->filter(
                 fn($item) =>
                 $item->created_at->month === $this->targetMonth
             );
 
-        $callOfDuties = CallOfDuty::latest('created_at')->where('user_id', $userId)->with(['user'])->get();
+        $callOfDuties = CallOfDuty::latest('days')
+            ->where('user_id', $userId)
+            ->with(['user'])
+            ->get()
+            ->groupBy('days');
 
         $dataCoD = [
             'title_CoD' => 'PIKET KANTOR HP CREATIVE SPACE ' . today('Asia/Kuala_Lumpur')->year,
@@ -84,7 +106,8 @@ class PDFController extends Controller
 
         $data = [
             'title_absen' => 'ABSENSI MAGANG ' . today('Asia/Kuala_Lumpur')->year,
-            'month' => Carbon::create()->month($this->searchMonth)->translatedFormat('F'),
+            'week' => $this->weekNum,
+            'month' => Carbon::create()->month($this->searchByMonth)->translatedFormat('F'),
             'datetime' => now('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y HH:mm'),
             'attendances' => $attendances,
         ];
@@ -93,7 +116,7 @@ class PDFController extends Controller
 
         $internName = InternAttend::where('user_id', $userId)->first()->user?->name;
 
-        $fileName = 'Absensi Magang ' . (string) $internName . '-' . today('Asia/Kuala_Lumpur')->toDateString() . '.pdf';
+        $fileName = 'Data Rekap Magang HP Creative Space  ' . (string) $internName . '-' . today('Asia/Kuala_Lumpur')->toDateString() . '.pdf';
 
         return $pdf->download($fileName);
     }

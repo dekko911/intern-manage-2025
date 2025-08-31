@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\CheckAttendStatus;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use LaravelEasyRepository\Traits\GenUid;
 
@@ -13,6 +14,7 @@ use LaravelEasyRepository\Traits\GenUid;
  * @property string $user_id
  * @property CheckAttendStatus $status
  * @property string $tanggal
+ * @property-read string $tanggal_iso
  * @property string|null $jam_masuk
  * @property string|null $jam_keluar
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -37,6 +39,11 @@ class InternAttend extends Model
 {
     use GenUid;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     protected $fillable = [
         'user_id',
         'status',
@@ -55,6 +62,16 @@ class InternAttend extends Model
         return [
             'status' => CheckAttendStatus::class,
         ];
+    }
+
+    /**
+     * Konversi dari Format tanggal Sistem ke Mudah di baca untuk Manusia. cara panggil method/property nya adalah ambil bagian tengahnya. (get dan Attribute nya, hilangkan; ex: tanggal_iso)
+     *
+     * @return string
+     */
+    public function getTanggalIsoAttribute(): string
+    {
+        return Carbon::parse($this->tanggal)->isoFormat('DD MMMM YYYY');
     }
 
     public function user()

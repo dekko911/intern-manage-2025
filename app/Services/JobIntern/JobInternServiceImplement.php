@@ -7,6 +7,7 @@ use App\Models\TempJobIntern;
 use LaravelEasyRepository\ServiceApi;
 use App\Repositories\JobIntern\JobInternRepository;
 use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -76,7 +77,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                 case 'admin':
                     $data = $this->mainRepository->create([
                         'user_id' => $this->request->user_id,
-                        'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
+                        'created' => $this->request->created ?? today('Asia/Kuala_Lumpur')->toDateString(),
                         'task' => $this->request->task,
                         'description' => $this->request->description,
                         'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
@@ -91,17 +92,17 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                         'description' => $data->description,
                         'deadline' => $data->deadline,
                         'status' => $data->status,
-                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
+                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
                     ]);
                     break;
                 case 'staff':
                     $data = $this->mainRepository->create([
-                        'user_id' => $this->request->user_id, // ingat ubah
-                        'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
+                        'user_id' => $this->request->user_id,
+                        'created' => $this->request->created ?? today('Asia/Kuala_Lumpur')->toDateString(),
                         'task' => $this->request->task,
                         'description' => $this->request->description,
                         'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
-                        'status' => CheckJobStatus::PENDING, // jaga" line ini, bakal diganti pakai enum PROGRESS
+                        'status' => CheckJobStatus::PENDING,
                     ]);
 
                     TempJobIntern::create([
@@ -112,17 +113,17 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                         'description' => $data->description,
                         'deadline' => $data->deadline,
                         'status' => $data->status,
-                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
+                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
                     ]);
                     break;
                 case 'intern':
                     $data = $this->mainRepository->create([
-                        'user_id' => Auth::id(), // ingat ubah
-                        'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
+                        'user_id' => Auth::id(),
+                        'created' => $this->request->created ?? today('Asia/Kuala_Lumpur')->toDateString(),
                         'task' => $this->request->task,
                         'description' => $this->request->description,
                         'deadline' => CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
-                        'status' => CheckJobStatus::PENDING, // jaga" line ini, bakal diganti pakai enum PROGRESS
+                        'status' => CheckJobStatus::PENDING,
                     ]);
 
                     TempJobIntern::create([
@@ -133,7 +134,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                         'description' => $data->description,
                         'deadline' => $data->deadline,
                         'status' => $data->status,
-                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
+                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
                     ]);
                     break;
                 default;
@@ -160,7 +161,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
 
             $data = $this->mainRepository->update($id, [
                 'user_id' => $this->request->user_id,
-                'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
+                'created' => $this->request->created ?? today('Asia/Kuala_Lumpur')->toDateString(),
                 'task' => $this->request->task,
                 'description' => $this->request->description,
                 'deadline' => $this->request->deadline,
@@ -176,11 +177,12 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                 TempJobIntern::create([
                     'job_intern_id' => $id,
                     'user_id' => $this->request->user_id,
-                    'created' => today('Asia/Kuala_Lumpur')->isoFormat('dddd, DD MMMM Y'),
+                    'created' => $this->request->created ?? today('Asia/Kuala_Lumpur')->toDateString(),
                     'task' => $this->request->task,
                     'description' => $this->request->description,
                     'deadline' => $this->request->deadline,
                     'status' => $status,
+                    'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
                 ]);
             }
 

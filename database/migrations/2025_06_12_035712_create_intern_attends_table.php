@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->time('jam_masuk')->nullable();
             $table->time('jam_keluar')->nullable();
             $table->timestamps();
+            $table->unique(['user_id', 'tanggal']);
         });
     }
 

@@ -19,22 +19,21 @@ class ClearTempJobInterns extends Command
      *
      * @var string
      */
-    protected $description = 'Delete expired temp job interns';
+    protected $description = 'Deleting expired temp job interns';
 
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $yearNow = today('Asia/Kuala_Lumpur')->year;
         $monthNow = today('Asia/Kuala_Lumpur')->month;
         $weekNumberNow = today('Asia/Kuala_Lumpur')->weekNumberInMonth;
-        $weekDayNow = today('Asia/Kuala_Lumpur')->dayOfWeek;
 
         TempJobIntern::where(
             'expired_at',
             '<=',
-            ClearTempInternAttends::getDateFromWeekNumberInMonth($yearNow, $monthNow, $weekNumberNow, $weekDayNow)
+            getDateFromWeekNumberInMonth($yearNow, $monthNow, $weekNumberNow)
         )->delete();
 
         $this->info('Expired temp job interns cleared!');

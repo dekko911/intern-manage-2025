@@ -60,6 +60,10 @@ class CoDServiceImplement extends ServiceApi implements CoDService
     public function createCoD()
     {
         try {
+            if ($this->mainRepository->checkDataDoubleCoDIfExists()) {
+                throw new \Exception("Tidak Bisa Di input Dua Kali dalam Sehari!");
+            }
+
             $this->request->validate([
                 'user_id' => ['required'],
                 'days' => ['required'],

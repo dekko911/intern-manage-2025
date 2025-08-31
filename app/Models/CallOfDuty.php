@@ -28,6 +28,11 @@ class CallOfDuty extends Model
 {
     use GenUid;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     protected $fillable = [
         'user_id',
         'days',

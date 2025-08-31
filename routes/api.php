@@ -6,6 +6,7 @@ use App\Http\Controllers\InternAttendController;
 use App\Http\Controllers\JobInternController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TempInternAttendController;
 use App\Http\Controllers\TempJobInternController;
@@ -21,7 +22,7 @@ Route::get(
 
 Route::middleware(['guest', 'throttle:api'])->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login');
-    Route::post('/register', [UserController::class, 'store'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register'])->name('register');
 });
 
 Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:api'])->group(function () {
@@ -30,8 +31,8 @@ Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:api'])->group(func
 });
 
 Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->group(function () {
-    Route::apiResource('users', UserController::class);
     Route::post('/profile/{id}', [ProfileController::class, 'profile']);
+    Route::apiResource('users', UserController::class);
     Route::apiResource('search', SearchController::class);
     Route::apiResource('cods', CoDController::class);
     Route::apiResource('tmp_ias', TempInternAttendController::class);
@@ -46,11 +47,11 @@ Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->grou
 Route::middleware(['auth:sanctum', 'ability:intern', 'throttle:api'])->group(function () {
     Route::post('/profile/{id}', [ProfileController::class, 'profile']);
     Route::apiResource('search', SearchController::class);
-    Route::get('/generate_pdf', [PDFController::class, 'generatePDF']);
-    Route::get('/generate_pdf/{userId}', [PDFController::class, 'generatePDFByUserId']);
     Route::apiResource('tmp_ia', TempInternAttendController::class);
     Route::apiResource('tmp_ji', TempJobInternController::class);
     Route::post('/attend_intern', [InternAttendController::class, 'store']);
     Route::post('/intern_job', [JobInternController::class, 'store']);
     Route::get('/cod', [CoDController::class, 'index']);
+    Route::get('/generate_pdf', [PDFController::class, 'generatePDF']);
+    Route::get('/generate_pdf/{userId}', [PDFController::class, 'generatePDFByUserId']);
 });

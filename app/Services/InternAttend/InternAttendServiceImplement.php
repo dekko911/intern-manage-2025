@@ -6,6 +6,7 @@ use App\Enums\CheckAttendStatus;
 use App\Models\TempInternAttend;
 use LaravelEasyRepository\ServiceApi;
 use App\Repositories\InternAttend\InternAttendRepository;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
@@ -63,6 +64,10 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
     public function createAttend()
     {
         try {
+            if ($this->mainRepository->checkDataDoubleAttendIfExists()) {
+                throw new \Exception("Tidak Bisa Absensi Dua Kali dalam Sehari!");
+            }
+
             $this->request->validate([
                 'status' => ['required', new Enum(CheckAttendStatus::class)],
             ]);
@@ -74,7 +79,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                     $data = $this->mainRepository->create([
                         'user_id' => $this->request->user_id,
                         'status' => $status,
-                        'tanggal' => $this->request->tanggal,
+                        'tanggal' => $this->request->tanggal ?? today('Asia/Kuala_Lumpur')->toDateString(),
                         'jam_masuk' => $this->request->jam_masuk,
                         'jam_keluar' => $this->request->jam_keluar ?? "-",
                     ]);
@@ -86,14 +91,14 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                         'tanggal' => $data->tanggal,
                         'jam_masuk' => $data->jam_masuk,
                         'jam_keluar' => $data->jam_keluar,
-                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
+                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
                     ]);
                     break;
                 case 'staff':
                     $data = $this->mainRepository->create([
                         'user_id' => $this->request->user_id,
                         'status' => $status,
-                        'tanggal' => $this->request->tanggal,
+                        'tanggal' => $this->request->tanggal ?? today('Asia/Kuala_Lumpur')->toDateString(),
                         'jam_masuk' => $this->request->jam_masuk,
                         'jam_keluar' => $this->request->jam_keluar ?? "-",
                     ]);
@@ -105,7 +110,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                         'tanggal' => $data->tanggal,
                         'jam_masuk' => $data->jam_masuk,
                         'jam_keluar' => $data->jam_keluar,
-                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
+                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
                     ]);
                     break;
                 case 'intern':
@@ -115,7 +120,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                             'status' => $status,
                             'tanggal' => today('Asia/Kuala_Lumpur')->toDateString(),
                             'jam_masuk' => "-",
-                            'jam_keluar' => $this->request->jam_keluar ?? "-",
+                            'jam_keluar' => "-",
                         ]);
 
                         TempInternAttend::create([
@@ -125,7 +130,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                             'tanggal' => $data->tanggal,
                             'jam_masuk' => $data->jam_masuk,
                             'jam_keluar' => $data->jam_keluar,
-                            'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
+                            'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
                         ]);
                     } else {
                         $data = $this->mainRepository->create([
@@ -143,7 +148,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                             'tanggal' => $data->tanggal,
                             'jam_masuk' => $data->jam_masuk,
                             'jam_keluar' => $data->jam_keluar,
-                            'expired_at' => now('Asia/Kuala_Lumpur')->addWeek(),
+                            'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
                         ]);
                     }
                     break;
@@ -188,6 +193,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                     'tanggal' => $this->request->tanggal,
                     'jam_masuk' => $this->request->jam_masuk,
                     'jam_keluar' => $this->request->jam_keluar,
+                    'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
                 ]);
             }
 

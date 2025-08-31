@@ -12,17 +12,19 @@ class TempJobInternController extends Controller
     {
         $search = request('q');
 
-        $temp_job_interns = TempJobIntern::latest('created_at')->with(['user', 'job_intern'])->when(
-            $search,
-            fn($q) =>
-            $q->where('created', 'like', "%$search%")
-                ->orWhere('task', 'like', "%$search%")
-                ->orWhere('description', 'like', "%$search%")
-                ->orWhere('deadline', 'like', "%$search%")
-                ->orWhere('status', 'like', "%$search%")
-                ->orWhere('expired_at', 'like', "%$search%")
-                ->orWhereRelation('user', 'name', 'like', "%$search%")
-        )->get();
+        $temp_job_interns = TempJobIntern::latest('created')
+            ->with(['user', 'job_intern'])
+            ->when(
+                $search,
+                fn($q) =>
+                $q->where('created', 'like', "%$search%")
+                    ->orWhere('task', 'like', "%$search%")
+                    ->orWhere('description', 'like', "%$search%")
+                    ->orWhere('deadline', 'like', "%$search%")
+                    ->orWhere('status', 'like', "%$search%")
+                    ->orWhere('expired_at', 'like', "%$search%")
+                    ->orWhereRelation('user', 'name', 'like', "%$search%")
+            )->get();
 
         return response()->json([
             'status' => 'OK',

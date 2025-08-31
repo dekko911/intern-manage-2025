@@ -18,7 +18,6 @@ class ProfileController extends Controller
             'name' => ['required'],
             'email' => ['required'],
             'password' => ['confirmed', 'min:6'],
-            'role' => ['required'],
             'photo' => ['mimes:png,jpg,webp', 'max:1024'],
         ]);
 
@@ -37,8 +36,8 @@ class ProfileController extends Controller
         $profile->update([
             'name' => $r->name,
             'email' => $r->email,
-            'date' => today('Asia/Kuala_Lumpur')->isoFormat('DD MMMM Y'),
-            'role' => $r->role,
+            'date' => today('Asia/Kuala_Lumpur')->isoFormat('DD MMMM YYYY'),
+            'role' => $profile->role,
         ]);
 
         if ($r->password) {
@@ -50,7 +49,7 @@ class ProfileController extends Controller
         }
 
         return response()->json([
-            'status' => 'OK',
+            'status' => 'success',
             'data' => $profile,
         ]);
     }

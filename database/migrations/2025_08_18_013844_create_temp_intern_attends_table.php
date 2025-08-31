@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->time('jam_keluar');
             $table->timestamp('expired_at')->nullable();
             $table->timestamps();
+            $table->unique(['user_id', 'tanggal']);
         });
     }
 

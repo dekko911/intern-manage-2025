@@ -5,6 +5,7 @@ namespace App\Repositories\InternAttend;
 use LaravelEasyRepository\Implementations\Eloquent;
 use App\Models\InternAttend;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class InternAttendRepositoryImplement extends Eloquent implements InternAttendRepository
 {
@@ -25,14 +26,23 @@ class InternAttendRepositoryImplement extends Eloquent implements InternAttendRe
 
     public function getDataAttend()
     {
-        return $this->model->latest('created_at')->with(['user'])->when(
-            $this->search,
-            fn($q) =>
-            $q->where('status', 'like', "%$this->search%")
-                ->orWhere('tanggal', 'like', "%$this->search%")
-                ->orWhere('jam_masuk', 'like', "%$this->search%")
-                ->orWhere('jam_keluar', 'like', "%$this->search")
-                ->orWhereRelation('user', 'name', 'like', "%$this->search%")
-        )->get();
+        return $this->model->latest('created_at')
+            ->with(['user'])
+            ->when(
+                $this->search,
+                fn($q) =>
+                $q->where('status', 'like', "%$this->search%")
+                    ->orWhere('tanggal', 'like', "%$this->search%")
+                    ->orWhere('jam_masuk', 'like', "%$this->search%")
+                    ->orWhere('jam_keluar', 'like', "%$this->search")
+                    ->orWhereRelation('user', 'name', 'like', "%$this->search%")
+            )->get();
+    }
+
+    public function checkDataDoubleAttendIfExists(): bool
+    {
+        return $this->model->where('user_id', Auth::user()->id)
+            ->where('tanggal', today('Asia/Kuala_Lumpur')->toDateString())
+            ->exists();
     }
 }

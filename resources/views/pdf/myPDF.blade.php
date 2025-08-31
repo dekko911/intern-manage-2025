@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Absensi Magang {{ today('Asia/Kuala_Lumpur')->year }}</title>
+    <title>HP Creative Space {{ today('Asia/Kuala_Lumpur')->year }}</title>
     <style type="text/css">
         @font-face {
             font-family: "Lato", sans-serif;
@@ -68,7 +68,7 @@
                     <td>{{ ++$key }}</td>
                     <td>{{ $item->user?->name }}</td>
                     <td>{{ $item->status }}</td>
-                    <td>{{ $item->tanggal }}</td>
+                    <td>{{ $item->tanggal_iso }}</td>
                     <td>{{ $item->jam_masuk }}</td>
                     <td>{{ $item->jam_keluar }}</td>
                 </tr>
@@ -79,8 +79,6 @@
 
     <div class="page-break"></div>
 
-    {{-- Belum selesai, layout masih belum ter rencana di kepala. --}}
-
     <h1>{{ $title_CoD }}</h1>
     <table>
         <thead>
@@ -90,11 +88,17 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($callOfDuties as $item)
-                <tr>
-                    <td>{{ $item->days }}</td>
-                    <td>{{ $item->user?->name }}</td>
-                </tr>
+            @foreach ($callOfDuties as $day => $items)
+                @foreach ($items as $i => $item)
+                    <tr>
+                        @if ($i === 0)
+                            <td rowspan="{{ count($items) }}" style="width: 45%;">
+                                {{ strtoupper($day) }}
+                            </td>
+                        @endif
+                        <td>{{ Str::studly($item->user?->name) }}</td>
+                    </tr>
+                @endforeach
             @endforeach
         </tbody>
     </table>

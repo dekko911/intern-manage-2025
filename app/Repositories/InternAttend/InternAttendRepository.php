@@ -7,4 +7,6 @@ use LaravelEasyRepository\Repository;
 interface InternAttendRepository extends Repository
 {
     public function getDataAttend();
+
+    public function checkDataDoubleAttendIfExists(): bool;
 }
