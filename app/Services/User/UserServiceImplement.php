@@ -112,9 +112,9 @@ class UserServiceImplement extends ServiceApi implements UserService
         try {
             $getUserId = $this->mainRepository->findOrFail($id);
 
-            // mencari target user menggunakan param $id jika target itu adalah admin.
+            // mencari target user admin menggunakan param $id.
             if ($getUserId->role === 'admin') {
-                // jika id yang login tidak sama dengan parameter id, artinya hanya dia saja yang bisa me rubah dirinya sendiri. (si admin maksudnya)
+                // jika id yang login tidak sama dengan parameter $id, artinya hanya dia saja yang bisa me rubah dirinya sendiri. (si admin maksudnya)
                 if (Auth::id() !== $id) {
                     throw new \Exception("Dilarang edit user admin selain si admin itu sendiri!");
                 }
@@ -135,12 +135,10 @@ class UserServiceImplement extends ServiceApi implements UserService
                 }
             }
 
-            $updateFile = $this->mainRepository->findOrFail($id);
-
             if ($this->file) {
                 // delete the old file when is available at directory,
-                if ($updateFile->photo) {
-                    Storage::disk('public')->delete("img/avt/$updateFile->photo");
+                if ($getUserId->photo) {
+                    Storage::disk('public')->delete("img/avt/$getUserId->photo");
                 }
 
                 // and store the new one.
