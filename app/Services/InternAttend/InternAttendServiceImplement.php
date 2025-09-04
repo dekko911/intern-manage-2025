@@ -27,6 +27,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
      * because used in extends service class
      */
     protected InternAttendRepository $mainRepository;
+
     private Request $request;
 
     public function __construct(InternAttendRepository $mainRepository, Request $request)
@@ -76,24 +77,6 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
 
             switch (Auth::user()->role) {
                 case 'admin':
-                    $data = $this->mainRepository->create([
-                        'user_id' => $this->request->user_id,
-                        'status' => $status,
-                        'tanggal' => $this->request->tanggal ?? today('Asia/Kuala_Lumpur')->toDateString(),
-                        'jam_masuk' => $this->request->jam_masuk,
-                        'jam_keluar' => $this->request->jam_keluar ?? "-",
-                    ]);
-
-                    TempInternAttend::create([
-                        'intern_attend_id' => $data->id,
-                        'user_id' => $data->user_id,
-                        'status' => $data->status,
-                        'tanggal' => $data->tanggal,
-                        'jam_masuk' => $data->jam_masuk,
-                        'jam_keluar' => $data->jam_keluar,
-                        'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
-                    ]);
-                    break;
                 case 'staff':
                     $data = $this->mainRepository->create([
                         'user_id' => $this->request->user_id,
@@ -166,6 +149,8 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
     public function updateAttend($id)
     {
         try {
+            $getInternAttendId = $this->mainRepository->findOrFail($id);
+
             $this->request->validate([
                 'status' => ['required', new Enum(CheckAttendStatus::class)],
                 'tanggal' => ['required'],
@@ -178,7 +163,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
             $data = $this->mainRepository->update($id, [
                 'user_id' => $this->request->user_id,
                 'status' => $status,
-                'tanggal' => $this->request->tanggal,
+                'tanggal' => $this->request->tanggal ?? $getInternAttendId->tanggal,
                 'jam_masuk' => $this->request->jam_masuk,
                 'jam_keluar' => $this->request->jam_keluar,
             ]);

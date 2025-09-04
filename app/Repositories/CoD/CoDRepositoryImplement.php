@@ -26,7 +26,7 @@ class CoDRepositoryImplement extends Eloquent implements CoDRepository
 
     public function getDataCoD()
     {
-        return $this->model->latest('created_at')->with(['user'])->when(
+        return $this->model->latest('created_at')->with(['user:id,name,photo'])->when(
             $this->search,
             fn($q) =>
             $q->where('days', 'like', "%$this->search%")

@@ -151,6 +151,8 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
     public function updateInternJob($id)
     {
         try {
+            $getJobInternId = $this->mainRepository->findOrFail($id);
+
             $this->request->validate([
                 'task' => ['required'],
                 'description' => ['required'],
@@ -161,7 +163,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
 
             $data = $this->mainRepository->update($id, [
                 'user_id' => $this->request->user_id,
-                'created' => $this->request->created ?? today('Asia/Kuala_Lumpur')->toDateString(),
+                'created' => $this->request->created ?? $getJobInternId->created,
                 'task' => $this->request->task,
                 'description' => $this->request->description,
                 'deadline' => $this->request->deadline,

@@ -26,17 +26,34 @@ class InternAttendRepositoryImplement extends Eloquent implements InternAttendRe
 
     public function getDataAttend()
     {
-        return $this->model->latest('created_at')
-            ->with(['user'])
-            ->when(
-                $this->search,
-                fn($q) =>
-                $q->where('status', 'like', "%$this->search%")
-                    ->orWhere('tanggal', 'like', "%$this->search%")
-                    ->orWhere('jam_masuk', 'like', "%$this->search%")
-                    ->orWhere('jam_keluar', 'like', "%$this->search")
-                    ->orWhereRelation('user', 'name', 'like', "%$this->search%")
-            )->get();
+        switch (Auth::user()->role) {
+            case 'admin':
+            case 'staff':
+                return $this->model->latest('created_at')
+                    ->with(['user:id,name'])
+                    ->when(
+                        $this->search,
+                        fn($q) =>
+                        $q->where('status', 'like', "%$this->search%")
+                            ->orWhere('tanggal', 'like', "%$this->search%")
+                            ->orWhere('jam_masuk', 'like', "%$this->search%")
+                            ->orWhere('jam_keluar', 'like', "%$this->search")
+                            ->orWhereRelation('user', 'name', 'like', "%$this->search%")
+                    )->get();
+            case 'intern':
+                return $this->model->latest('created_at')
+                    ->with(['user:id,name'])
+                    ->when(
+                        $this->search,
+                        fn($q) =>
+                        $q->where('status', 'like', "%$this->search%")
+                            ->orWhere('tanggal', 'like', "%$this->search%")
+                            ->orWhere('jam_masuk', 'like', "%$this->search%")
+                            ->orWhere('jam_keluar', 'like', "%$this->search")
+                            ->orWhereRelation('user', 'name', 'like', "%$this->search%")
+                    )->where('user_id', Auth::id())->get();
+            default;
+        }
     }
 
     public function checkDataDoubleAttendIfExists(): bool

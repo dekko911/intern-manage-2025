@@ -31,7 +31,7 @@ class PDFController extends Controller
     public function generatePDF()
     {
         $attendances = InternAttend::latest('status')
-            ->with(['user'])
+            ->with(['user:id,name'])
             ->when(
                 $this->searchByMonth,
                 fn($m) =>
@@ -43,7 +43,7 @@ class PDFController extends Controller
                 $item->created_at->month === $this->targetMonth
             );
 
-        $callOfDuties = CallOfDuty::latest('days')->with(['user'])->get()->groupBy('days');
+        $callOfDuties = CallOfDuty::latest('days')->with(['user:id,name'])->get()->groupBy('days');
 
         $dataCoD = [
             'title_CoD' => 'PIKET KANTOR HP CREATIVE SPACE ' . today('Asia/Kuala_Lumpur')->year,
@@ -76,7 +76,7 @@ class PDFController extends Controller
 
         $attendances = InternAttend::latest('status')
             ->where('user_id', $userId)
-            ->with(['user'])
+            ->with(['user:id,name'])
             ->when(
                 $this->searchByMonth,
                 fn($m) =>
@@ -95,7 +95,7 @@ class PDFController extends Controller
 
         $callOfDuties = CallOfDuty::latest('days')
             ->where('user_id', $userId)
-            ->with(['user'])
+            ->with(['user:id,name'])
             ->get()
             ->groupBy('days');
 

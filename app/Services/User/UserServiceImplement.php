@@ -118,6 +118,10 @@ class UserServiceImplement extends ServiceApi implements UserService
                 if (Auth::id() !== $id) {
                     throw new \Exception("Dilarang edit user admin selain si admin itu sendiri!");
                 }
+
+                if ($this->mainRepository->checkRoleDoubleAdminIfExists()) {
+                    throw new \Exception("Tidak Bisa Tambah User Admin Lagi!");
+                }
             }
 
             // METHOD SPOOFING like: "_method = PUT || PATCH" <- in params / parameter.
@@ -128,12 +132,6 @@ class UserServiceImplement extends ServiceApi implements UserService
                 'role' => ['required'],
                 'photo' => ['mimes:png,jpg,webp', 'max:1024'],
             ]);
-
-            if ($this->request->role === 'admin') {
-                if ($this->mainRepository->checkRoleDoubleAdminIfExists()) {
-                    throw new \Exception("Tidak Bisa Tambah User Admin Lagi!");
-                }
-            }
 
             if ($this->file) {
                 // delete the old file when is available at directory,
@@ -150,7 +148,7 @@ class UserServiceImplement extends ServiceApi implements UserService
             $data = $this->mainRepository->update($id, [
                 'name' => $this->request->name,
                 'email' => $this->request->email,
-                'date' => today('Asia/Kuala_Lumpur')->isoFormat('DD MMMM YYYY'),
+                'date' => $getUserId->date,
                 'role' => $this->request->role,
             ]);
 

@@ -36,6 +36,6 @@ class UserRepositoryImplement extends Eloquent implements UserRepository
 
     public function checkRoleDoubleAdminIfExists(): bool
     {
-        return $this->model->where('role', '=', 'admin')->exists();
+        return $this->model->where('role', '=', "%admin%")->exists();
     }
 }
