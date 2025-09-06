@@ -98,6 +98,7 @@ class PDFController extends Controller
 
         $callOfDuties = CallOfDuty::latest('days')
             ->with(['user:id,name'])
+            ->where('user_id', $userId)
             ->get()
             ->groupBy('days');
 

@@ -18,20 +18,29 @@ class CoDRepositoryImplement extends Eloquent implements CoDRepository
 
     protected $search;
 
+    protected string $searchByDay;
+
     public function __construct(CallOfDuty $model)
     {
         $this->model = $model;
         $this->search = request('search');
+        $this->searchByDay = request('day', today('Asia/Kuala_Lumpur')->translatedFormat('l'));
     }
 
     public function getDataCoD()
     {
-        return $this->model->latest('created_at')->with(['user:id,name,photo'])->when(
-            $this->search,
-            fn($q) =>
-            $q->where('days', 'like', "%$this->search%")
-                ->orWhereRelation('user', 'name', 'like', "%$this->search%")
-        )->get();
+        return $this->model->latest('created_at')->with(['user:id,name,photo'])
+            ->when(
+                $this->searchByDay,
+                fn($d) =>
+                $d->whereDay('days', $this->searchByDay)
+            )
+            ->when(
+                $this->search,
+                fn($q) =>
+                $q->where('days', 'like', "%$this->search%")
+                    ->orWhereRelation('user', 'name', 'like', "%$this->search%")
+            )->get();
     }
 
     public function checkDataDoubleCoDIfExists(): bool
