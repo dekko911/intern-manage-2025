@@ -18,10 +18,13 @@ class JobInternRepositoryImplement extends Eloquent implements JobInternReposito
 
     private $search;
 
+    private $searchByStatus;
+
     public function __construct(JobIntern $model)
     {
         $this->model = $model;
         $this->search = request('search');
+        $this->searchByStatus = request('status', 'Pending');
     }
 
     public function getDataInternJob()
@@ -29,15 +32,21 @@ class JobInternRepositoryImplement extends Eloquent implements JobInternReposito
         switch (Auth::user()->role) {
             case 'admin':
             case 'staff':
-                return $this->model->with(['user:id,name'])->when(
-                    $this->search,
-                    fn($q) =>
-                    $q->where('task', 'like', "%$this->search%")
-                        ->orWhere('created', 'like', "%$this->search%")
-                        ->orWhere('description', 'like', "%$this->search%")
-                        ->orWhere('status', 'like', "%$this->search%")
-                        ->orWhereRelation('user', 'name', 'like', "%$this->search%")
-                )->orderByRaw("CASE WHEN status = 'Done' THEN 1 ELSE 0 END")->oldest('created_at')->get();
+                return $this->model->with(['user:id,name'])
+                    ->when(
+                        $this->searchByStatus,
+                        fn($s) =>
+                        $s->whereStatus($this->searchByStatus)
+                    )
+                    ->when(
+                        $this->search,
+                        fn($q) =>
+                        $q->where('task', 'like', "%$this->search%")
+                            ->orWhere('created', 'like', "%$this->search%")
+                            ->orWhere('description', 'like', "%$this->search%")
+                            ->orWhere('status', 'like', "%$this->search%")
+                            ->orWhereRelation('user', 'name', 'like', "%$this->search%")
+                    )->orderByRaw("CASE WHEN status = 'Done' THEN 1 ELSE 0 END")->oldest('created_at')->get();
             case 'intern':
                 return $this->model->with(['user:id,name'])->when(
                     $this->search,

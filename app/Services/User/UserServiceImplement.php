@@ -129,7 +129,7 @@ class UserServiceImplement extends ServiceApi implements UserService
                 'photo' => ['mimes:png,jpg,webp', 'max:1024'],
             ]);
 
-            if ($getUserId->role === 'staff') {
+            if ($getUserId->role === 'staff' || $getUserId->role === 'intern') {
                 if ($this->request->role === 'admin') {
                     throw new \Exception("Admin hanya Satu saja, Tidak lebih.");
                 }

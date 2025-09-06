@@ -28,12 +28,12 @@ Route::middleware(['guest', 'throttle:api'])->group(function () {
 Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:api'])->group(function () {
     Route::apiResource('intern_attends', InternAttendController::class);
     Route::apiResource('job_interns', JobInternController::class);
-    Route::apiResource('tmp_ias', TempInternAttendController::class);
-    Route::apiResource('tmp_jis', TempJobInternController::class);
 });
 
 Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->group(function () {
     Route::post('/profile', [ProfileController::class, 'profile']);
+    Route::apiResource('tmp_ias', TempInternAttendController::class);
+    Route::apiResource('tmp_jis', TempJobInternController::class);
     Route::apiResource('users', UserController::class);
     Route::apiResource('search', SearchController::class);
     Route::apiResource('cods', CoDController::class);
