@@ -18,10 +18,13 @@ class InternAttendRepositoryImplement extends Eloquent implements InternAttendRe
 
     private $search;
 
+    private int $searchByMonth;
+
     public function __construct(InternAttend $model)
     {
         $this->model = $model;
         $this->search = request('search');
+        $this->searchByMonth = request('month', today('Asia/Kuala_Lumpur')->month);
     }
 
     public function getDataAttend()
@@ -31,6 +34,11 @@ class InternAttendRepositoryImplement extends Eloquent implements InternAttendRe
             case 'staff':
                 return $this->model->latest('created_at')
                     ->with(['user:id,name'])
+                    ->when(
+                        $this->searchByMonth,
+                        fn($m) =>
+                        $m->whereMonth('created_at', $this->searchByMonth)
+                    )
                     ->when(
                         $this->search,
                         fn($q) =>
@@ -43,6 +51,10 @@ class InternAttendRepositoryImplement extends Eloquent implements InternAttendRe
             case 'intern':
                 return $this->model->latest('created_at')
                     ->with(['user:id,name'])
+                    ->when(
+                        $this->searchByMonth,
+                        fn($m) => $m->whereMonth('created_at', $this->searchByMonth)
+                    )
                     ->when(
                         $this->search,
                         fn($q) =>

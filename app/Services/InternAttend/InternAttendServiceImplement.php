@@ -160,27 +160,56 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
 
             $status = $this->request->enum('status', CheckAttendStatus::class);
 
-            $data = $this->mainRepository->update($id, [
-                'user_id' => $this->request->user_id,
-                'status' => $status,
-                'tanggal' => $this->request->tanggal ?? $getInternAttendId->tanggal,
-                'jam_masuk' => $this->request->jam_masuk,
-                'jam_keluar' => $this->request->jam_keluar,
-            ]);
+            switch (Auth::user()->role) {
+                case 'admin':
+                case 'staff':
+                    $data = $this->mainRepository->update($id, [
+                        'user_id' => $this->request->user_id,
+                        'status' => $status,
+                        'tanggal' => $this->request->tanggal ?? $getInternAttendId->tanggal,
+                        'jam_masuk' => $this->request->jam_masuk,
+                        'jam_keluar' => $this->request->jam_keluar,
+                    ]);
 
-            if ($id) {
-                TempInternAttend::where('intern_attend_id', $id)->delete();
+                    if ($id) {
+                        TempInternAttend::where('intern_attend_id', $id)->delete();
 
-                TempInternAttend::create([
-                    'intern_attend_id' => $id,
-                    'user_id' => $this->request->user_id,
-                    'status' => $status,
-                    'tanggal' => $this->request->tanggal,
-                    'jam_masuk' => $this->request->jam_masuk,
-                    'jam_keluar' => $this->request->jam_keluar,
-                    'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
-                ]);
+                        TempInternAttend::create([
+                            'intern_attend_id' => $id,
+                            'user_id' => $this->request->user_id,
+                            'status' => $status,
+                            'tanggal' => $this->request->tanggal,
+                            'jam_masuk' => $this->request->jam_masuk,
+                            'jam_keluar' => $this->request->jam_keluar,
+                            'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
+                        ]);
+                    }
+                    break;
+                case 'intern':
+                    $data = $this->mainRepository->update($id, [
+                        'user_id' => Auth::id(),
+                        'status' => $getInternAttendId->status,
+                        'tanggal' => $getInternAttendId->tanggal,
+                        'jam_masuk' => $getInternAttendId->jam_masuk,
+                        'jam_keluar' => now('Asia/Kuala_Lumpur')->toTimeString(),
+                    ]);
+                    if ($id) {
+                        TempInternAttend::where('intern_attend_id', $id)->delete();
+
+                        TempInternAttend::create([
+                            'intern_attend_id' => $id,
+                            'user_id' => Auth::id(),
+                            'status' => $getInternAttendId->status,
+                            'tanggal' => $getInternAttendId->tanggal,
+                            'jam_masuk' => $getInternAttendId->jam_masuk,
+                            'jam_keluar' => now('Asia/Kuala_Lumpur')->toTimeString(),
+                            'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
+                        ]);
+                    }
+                    break;
+                default;
             }
+
 
             return $this->setCode(200)
                 ->setMessage("$this->title_intern $this->update_message_intern & ditandai di temp_intern_attends!")

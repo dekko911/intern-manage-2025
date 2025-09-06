@@ -28,30 +28,27 @@ Route::middleware(['guest', 'throttle:api'])->group(function () {
 Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:api'])->group(function () {
     Route::apiResource('intern_attends', InternAttendController::class);
     Route::apiResource('job_interns', JobInternController::class);
+    Route::apiResource('tmp_ias', TempInternAttendController::class);
+    Route::apiResource('tmp_jis', TempJobInternController::class);
 });
 
 Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->group(function () {
-    Route::post('/profile/{id}', [ProfileController::class, 'profile']);
+    Route::post('/profile', [ProfileController::class, 'profile']);
     Route::apiResource('users', UserController::class);
     Route::apiResource('search', SearchController::class);
     Route::apiResource('cods', CoDController::class);
-    Route::apiResource('tmp_ias', TempInternAttendController::class);
-    Route::apiResource('tmp_jis', TempJobInternController::class);
     Route::get('/job_intern', [JobInternController::class, 'index']);
-    Route::get('/intern_attend', [InternAttendController::class, 'index']);
     Route::post('/job_intern', [JobInternController::class, 'store']);
-    Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
-    Route::get('/generate-pdf/{userId}', [PDFController::class, 'generatePDFByUserId']);
+    Route::get('/intern_attend', [InternAttendController::class, 'index']);
 });
 
 Route::middleware(['auth:sanctum', 'ability:intern', 'throttle:api'])->group(function () {
-    Route::post('/profile/{id}', [ProfileController::class, 'profile']);
+    Route::post('/profile', [ProfileController::class, 'profile']);
     Route::apiResource('search', SearchController::class);
     Route::apiResource('tmp_ia', TempInternAttendController::class);
     Route::apiResource('tmp_ji', TempJobInternController::class);
     Route::post('/attend_intern', [InternAttendController::class, 'store']);
-    Route::post('/intern_job', [JobInternController::class, 'store']);
+    Route::patch('/attend_intern/{id}', [InternAttendController::class, 'update']);
     Route::get('/cod', [CoDController::class, 'index']);
-    Route::get('/generate_pdf', [PDFController::class, 'generatePDF']);
-    Route::get('/generate_pdf/{userId}', [PDFController::class, 'generatePDFByUserId']);
+    Route::get('/generate-pdf', [PDFController::class, 'generatePDFByUserId']);
 });
