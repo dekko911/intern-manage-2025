@@ -16,8 +16,7 @@ class ProfileController extends Controller
 
         $r->validate([
             'name' => ['required'],
-            'email' => ['required'],
-            'password' => ['confirmed', 'min:6'],
+            'email' => ['required', 'email'],
             'photo' => ['mimes:png,jpg,webp', 'max:1024'],
         ]);
 
@@ -36,13 +35,12 @@ class ProfileController extends Controller
         $profile->update([
             'name' => $r->name,
             'email' => $r->email,
-            'date' => today('Asia/Kuala_Lumpur')->isoFormat('DD MMMM YYYY'),
+            'date' => $profile->date,
+            'instansi' => $profile->instansi,
+            'periode' => $profile->periode,
+            'password' => $profile->password,
             'role' => $profile->role,
         ]);
-
-        if ($r->password) {
-            $profile->update(['password' => $r->password]);
-        }
 
         if ($r->photo) {
             $profile->update(['photo' => $fileName]);

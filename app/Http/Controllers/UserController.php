@@ -6,7 +6,7 @@ use App\Services\User\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-// This Was Called Cast (change the first variable type to actual variable type), yeah i think that's definition.
+// This Was Called Cast (change the first created variable type to actual variable type), yeah i think that's definition.
 // $numberString = "1234567890";
 // $numberToInt = (int) $numberString;
 // echo gettype($numberToInt);

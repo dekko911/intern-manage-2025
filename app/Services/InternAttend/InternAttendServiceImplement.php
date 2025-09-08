@@ -70,7 +70,11 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
             }
 
             $this->request->validate([
-                'status' => ['required', new Enum(CheckAttendStatus::class)],
+                'user_id' => ['sometimes', 'required'],
+                'status' => ['sometimes', 'required', new Enum(CheckAttendStatus::class)],
+                'tanggal' => ['sometimes', 'required'],
+                'jam_masuk' => ['sometimes', 'required'],
+                'jam_keluar' => ['sometimes', 'required'],
             ]);
 
             $status = $this->request->enum('status', CheckAttendStatus::class);
@@ -97,7 +101,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                     ]);
                     break;
                 case 'intern':
-                    if ($status === CheckAttendStatus::SAKIT || $status === CheckAttendStatus::IJIN || $status === CheckAttendStatus::ALPA) {
+                    if ($status === CheckAttendStatus::SAKIT or $status === CheckAttendStatus::IJIN or $status === CheckAttendStatus::ALPA) {
                         $data = $this->mainRepository->create([
                             'user_id' => Auth::id(),
                             'status' => $status,
@@ -152,10 +156,11 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
             $getInternAttendId = $this->mainRepository->findOrFail($id);
 
             $this->request->validate([
-                'status' => ['required', new Enum(CheckAttendStatus::class)],
-                'tanggal' => ['required'],
-                'jam_masuk' => ['required'],
-                'jam_keluar' => ['required'],
+                'user_id' => ['sometimes', 'required'],
+                'status' => ['sometimes', 'required', new Enum(CheckAttendStatus::class)],
+                'tanggal' => ['sometimes', 'required'],
+                'jam_masuk' => ['sometimes', 'required'],
+                'jam_keluar' => ['sometimes', 'required'],
             ]);
 
             $status = $this->request->enum('status', CheckAttendStatus::class);
@@ -166,7 +171,7 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                     $data = $this->mainRepository->update($id, [
                         'user_id' => $this->request->user_id,
                         'status' => $status,
-                        'tanggal' => $this->request->tanggal ?? $getInternAttendId->tanggal,
+                        'tanggal' => $this->request->tanggal,
                         'jam_masuk' => $this->request->jam_masuk,
                         'jam_keluar' => $this->request->jam_keluar,
                     ]);

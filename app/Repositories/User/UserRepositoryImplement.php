@@ -30,12 +30,14 @@ class UserRepositoryImplement extends Eloquent implements UserRepository
             fn($q) =>
             $q->where('name', 'like', "%$this->search%")
                 ->orWhere('email', 'like', "%$this->search%")
+                ->orWhere('instansi', 'like', "%$this->search%")
+                ->orWhere('periode', 'like', "%$this->search%")
                 ->orWhere('role', 'like', "%$this->search%")
         )->get();
     }
 
     public function checkRoleDoubleAdminIfExists(): bool
     {
-        return $this->model->where('role', '=', "%admin%")->exists();
+        return $this->model->where('role', '=', "admin")->exists();
     }
 }

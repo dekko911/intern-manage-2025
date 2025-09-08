@@ -213,6 +213,8 @@ namespace App\Models{
  * @property string $name
  * @property string $email
  * @property string $date
+ * @property string $instansi
+ * @property string $periode
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string $role
@@ -249,6 +251,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhoto($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereInstansi($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePeriode($value)
  * @mixin \Eloquent
  */
 	class User extends \Eloquent {}

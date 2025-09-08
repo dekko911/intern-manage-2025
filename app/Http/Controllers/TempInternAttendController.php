@@ -16,7 +16,7 @@ class TempInternAttendController extends Controller
         switch (Auth::user()->role) {
             case 'admin':
             case 'staff':
-                $temp_intern_attends = TempInternAttend::latest('created_at')->with(['user', 'intern_attend'])->when(
+                $temp_intern_attends = TempInternAttend::latest('created_at')->with(['user:id,name', 'intern_attend:id'])->when(
                     $search,
                     fn($q) =>
                     $q->where('status', 'like', "%$search%")
@@ -25,10 +25,10 @@ class TempInternAttendController extends Controller
                         ->orWhere('jam_keluar', 'like', "%$search%")
                         ->orWhere('expired_at', 'like', "%$search%")
                         ->orWhereRelation('user', 'name', 'like', "%$search%")
-                )->get();
+                )->get(['id', 'user_id', 'status', 'tanggal', 'jam_masuk', 'jam_keluar']);
                 break;
             case 'intern':
-                $temp_intern_attends = TempInternAttend::latest('created_at')->with(['user', 'intern_attend'])->when(
+                $temp_intern_attends = TempInternAttend::latest('created_at')->with(['user:id,name', 'intern_attend:id'])->when(
                     $search,
                     fn($q) =>
                     $q->where('status', 'like', "%$search%")
@@ -37,7 +37,7 @@ class TempInternAttendController extends Controller
                         ->orWhere('jam_keluar', 'like', "%$search%")
                         ->orWhere('expired_at', 'like', "%$search%")
                         ->orWhereRelation('user', 'name', 'like', "%$search%")
-                )->where('user_id', Auth::id())->get();
+                )->where('user_id', Auth::id())->get(['id', 'user_id', 'status', 'tanggal', 'jam_masuk', 'jam_keluar']);
                 break;
             default;
         }

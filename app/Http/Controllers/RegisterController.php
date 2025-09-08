@@ -20,6 +20,8 @@ class RegisterController extends Controller
             'name' => $r->name,
             'email' => $r->email,
             'date' => today('Asia/Kuala_Lumpur')->isoFormat('DD MMMM YYYY'),
+            'instansi' => '-',
+            'periode' => '-',
             'password' => $r->password,
             'role' => 'intern',
             'photo' => '-'

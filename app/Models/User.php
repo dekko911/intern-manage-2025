@@ -11,12 +11,14 @@ use Laravel\Sanctum\HasApiTokens;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $name
  * @property string $email
  * @property string $date
+ * @property string $instansi
+ * @property string $periode
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string $role
@@ -53,6 +55,8 @@ use LaravelEasyRepository\Traits\GenUid;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhoto($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereInstansi($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePeriode($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -69,6 +73,8 @@ class User extends Authenticatable
         'name',
         'email',
         'date',
+        'instansi',
+        'periode',
         'password',
         'role',
         'photo',

@@ -24,7 +24,7 @@ class JobInternRepositoryImplement extends Eloquent implements JobInternReposito
     {
         $this->model = $model;
         $this->search = request('search');
-        $this->searchByStatus = request('status', 'Pending');
+        $this->searchByStatus = request('status');
     }
 
     public function getDataInternJob()

@@ -16,8 +16,7 @@ class TempJobInternController extends Controller
         switch (Auth::user()->role) {
             case 'admin':
             case 'staff':
-                $temp_job_interns = TempJobIntern::latest('created')
-                    ->with(['user', 'job_intern'])
+                $temp_job_interns = TempJobIntern::with(['user:id,name', 'job_intern:id'])
                     ->when(
                         $search,
                         fn($q) =>
@@ -28,11 +27,10 @@ class TempJobInternController extends Controller
                             ->orWhere('status', 'like', "%$search%")
                             ->orWhere('expired_at', 'like', "%$search%")
                             ->orWhereRelation('user', 'name', 'like', "%$search%")
-                    )->get();
+                    )->orderByRaw("CASE WHEN status = 'Done' THEN 1 ELSE 0 END")->oldest('created')->get(['id', 'user_id', 'created', 'task', 'description', 'deadline', 'status']);
                 break;
             case 'intern':
-                $temp_job_interns = TempJobIntern::latest('created')
-                    ->with(['user', 'job_intern'])
+                $temp_job_interns = TempJobIntern::with(['user:id,name', 'job_intern:id'])
                     ->when(
                         $search,
                         fn($q) =>
@@ -43,7 +41,7 @@ class TempJobInternController extends Controller
                             ->orWhere('status', 'like', "%$search%")
                             ->orWhere('expired_at', 'like', "%$search%")
                             ->orWhereRelation('user', 'name', 'like', "%$search%")
-                    )->where('user_id', Auth::id())->get();
+                    )->where('user_id', Auth::id())->orderByRaw("CASE WHEN status = 'Done' THEN 1 ELSE 0 END")->oldest('created')->get(['id', 'user_id', 'created', 'task', 'description', 'deadline', 'status']);
                 break;
             default;
         }

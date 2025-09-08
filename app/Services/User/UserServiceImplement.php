@@ -69,10 +69,12 @@ class UserServiceImplement extends ServiceApi implements UserService
     public function createUser()
     {
         try {
-            //'password_confirmation' => clue for input password confirmation.
+            //'password_confirmation' => clue for input field password confirmation.
             $this->request->validate([
                 'name' => ['required'],
-                'email' => ['required'],
+                'email' => ['required', 'email'],
+                'instansi' => ['sometimes', 'required'],
+                'periode' => ['sometimes', 'required'],
                 'password' => ['required', 'confirmed', 'min:6'],
                 'role' => ['required'],
                 'photo' => ['nullable', 'mimes:png,jpg,webp', 'max:1024'],
@@ -94,6 +96,8 @@ class UserServiceImplement extends ServiceApi implements UserService
                 'name' => $this->request->name,
                 'email' => $this->request->email,
                 'date' => today('Asia/Kuala_Lumpur')->isoFormat('DD MMMM YYYY'),
+                'instansi' => $this->request->instansi ?? '-',
+                'periode' => $this->request->periode ?? '-',
                 'password' => $this->request->password,
                 'role' => $this->request->role,
                 'photo' => $fileName ?? '-',
@@ -123,13 +127,15 @@ class UserServiceImplement extends ServiceApi implements UserService
             // METHOD SPOOFING like: "_method = PUT || PATCH" <- in params / parameter.
             $this->request->validate([
                 'name' => ['required'],
-                'email' => ['required'],
+                'email' => ['required', 'email'],
+                'instansi' => ['required'],
+                'periode' => ['required'],
                 'password' => ['confirmed', 'min:6'],
                 'role' => ['required'],
                 'photo' => ['mimes:png,jpg,webp', 'max:1024'],
             ]);
 
-            if ($getUserId->role === 'staff' || $getUserId->role === 'intern') {
+            if ($getUserId->role === 'staff' or $getUserId->role === 'intern') {
                 if ($this->request->role === 'admin') {
                     throw new \Exception("Admin hanya Satu saja, Tidak lebih.");
                 }
@@ -151,6 +157,8 @@ class UserServiceImplement extends ServiceApi implements UserService
                 'name' => $this->request->name,
                 'email' => $this->request->email,
                 'date' => $getUserId->date,
+                'instansi' => $this->request->instansi,
+                'periode' => $this->request->periode,
                 'role' => $this->request->role,
             ]);
 

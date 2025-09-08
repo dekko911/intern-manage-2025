@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->string('date');
+            $table->string('instansi');
+            $table->string('periode');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role');
@@ -39,7 +41,7 @@ return new class extends Migration {
             $table->integer('last_activity')->index();
         });
 
-        // remove everything file inside directory img.
+        // remove everything file kinds inside directory img.
         Storage::disk('public')->deleteDirectory('img');
     }
 

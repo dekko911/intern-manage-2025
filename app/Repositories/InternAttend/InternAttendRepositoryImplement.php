@@ -53,7 +53,8 @@ class InternAttendRepositoryImplement extends Eloquent implements InternAttendRe
                     ->with(['user:id,name'])
                     ->when(
                         $this->searchByMonth,
-                        fn($m) => $m->whereMonth('created_at', $this->searchByMonth)
+                        fn($m) =>
+                        $m->whereMonth('created_at', $this->searchByMonth)
                     )
                     ->when(
                         $this->search,

@@ -65,8 +65,8 @@ class CoDServiceImplement extends ServiceApi implements CoDService
             }
 
             $this->request->validate([
-                'user_id' => ['required'],
-                'days' => ['required'],
+                'user_id' => ['sometimes', 'required'],
+                'days' => ['sometimes', 'required'],
             ]);
 
             $data = $this->mainRepository->create([
@@ -86,8 +86,8 @@ class CoDServiceImplement extends ServiceApi implements CoDService
     {
         try {
             $validated = $this->request->validate([
-                'user_id' => ['required'],
-                'days' => ['required'],
+                'user_id' => ['sometimes', 'required'],
+                'days' => ['sometimes', 'required'],
             ]);
 
             $data = $this->mainRepository->update($id, $validated);

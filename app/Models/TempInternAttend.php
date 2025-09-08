@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- *
+ * 
  *
  * @property string $id
  * @property string $intern_attend_id

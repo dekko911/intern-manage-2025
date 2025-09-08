@@ -30,11 +30,11 @@ Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:api'])->group(func
     Route::apiResource('job_interns', JobInternController::class);
 });
 
+Route::apiResource('users', UserController::class);
 Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->group(function () {
     Route::post('/profile', [ProfileController::class, 'profile']);
     Route::apiResource('tmp_ias', TempInternAttendController::class);
     Route::apiResource('tmp_jis', TempJobInternController::class);
-    Route::apiResource('users', UserController::class);
     Route::apiResource('search', SearchController::class);
     Route::apiResource('cods', CoDController::class);
     Route::get('/job_intern', [JobInternController::class, 'index']);
