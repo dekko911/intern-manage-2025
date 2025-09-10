@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use LaravelEasyRepository\Traits\GenUid;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $job_intern_id
@@ -19,6 +19,7 @@ use LaravelEasyRepository\Traits\GenUid;
  * @property string $description
  * @property string|null $deadline
  * @property CheckJobStatus|null $status
+ * @property string $manage_by
  * @property string|null $expired_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -38,6 +39,7 @@ use LaravelEasyRepository\Traits\GenUid;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereTask($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereManageBy($value)
  * @mixin \Eloquent
  */
 class TempJobIntern extends Model
@@ -57,6 +59,7 @@ class TempJobIntern extends Model
         'description',
         'deadline',
         'status',
+        'manage_by',
         'expired_at',
     ];
 

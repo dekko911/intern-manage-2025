@@ -25,19 +25,23 @@ class TempInternAttendController extends Controller
                         ->orWhere('jam_keluar', 'like', "%$search%")
                         ->orWhere('expired_at', 'like', "%$search%")
                         ->orWhereRelation('user', 'name', 'like', "%$search%")
-                )->get(['id', 'user_id', 'status', 'tanggal', 'jam_masuk', 'jam_keluar']);
+                )->get();
                 break;
             case 'intern':
-                $temp_intern_attends = TempInternAttend::latest('created_at')->with(['user:id,name', 'intern_attend:id'])->when(
-                    $search,
-                    fn($q) =>
-                    $q->where('status', 'like', "%$search%")
-                        ->orWhere('tanggal', 'like', "%$search%")
-                        ->orWhere('jam_masuk', 'like', "%$search%")
-                        ->orWhere('jam_keluar', 'like', "%$search%")
-                        ->orWhere('expired_at', 'like', "%$search%")
-                        ->orWhereRelation('user', 'name', 'like', "%$search%")
-                )->where('user_id', Auth::id())->get(['id', 'user_id', 'status', 'tanggal', 'jam_masuk', 'jam_keluar']);
+                $temp_intern_attends = TempInternAttend::latest('created_at')
+                    ->with(['user:id,name', 'intern_attend:id'])
+                    ->when(
+                        $search,
+                        fn($q) =>
+                        $q->where('status', 'like', "%$search%")
+                            ->orWhere('tanggal', 'like', "%$search%")
+                            ->orWhere('jam_masuk', 'like', "%$search%")
+                            ->orWhere('jam_keluar', 'like', "%$search%")
+                            ->orWhere('expired_at', 'like', "%$search%")
+                            ->orWhereRelation('user', 'name', 'like', "%$search%")
+                    )
+                    ->where('user_id', Auth::id())
+                    ->get(['id', 'user_id', 'status', 'tanggal', 'jam_masuk', 'jam_keluar', 'created_at']);
                 break;
             default;
         }

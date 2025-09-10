@@ -30,9 +30,10 @@ Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:api'])->group(func
     Route::apiResource('job_interns', JobInternController::class);
 });
 
+Route::apiResource('users', UserController::class);
 Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->group(function () {
-    Route::post('/profile', [ProfileController::class, 'profile']);
-    Route::apiResource('users', UserController::class);
+    Route::get('/profiles', [ProfileController::class, 'getProfile']);
+    Route::post('/profiles', [ProfileController::class, 'profile']);
     Route::apiResource('tmp_ias', TempInternAttendController::class);
     Route::apiResource('tmp_jis', TempJobInternController::class);
     Route::apiResource('search', SearchController::class);
@@ -43,6 +44,7 @@ Route::middleware(['auth:sanctum', 'ability:admin,staff', 'throttle:api'])->grou
 });
 
 Route::middleware(['auth:sanctum', 'ability:intern', 'throttle:api'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'getProfile']);
     Route::post('/profile', [ProfileController::class, 'profile']);
     Route::apiResource('search', SearchController::class);
     Route::apiResource('tmp_ia', TempInternAttendController::class);

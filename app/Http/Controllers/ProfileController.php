@@ -10,6 +10,16 @@ use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
+    public function getProfile(): JsonResponse
+    {
+        $profile = Auth::user()->first(['name', 'email', 'date', 'instansi', 'periode', 'role', 'photo']);
+
+        return response()->json([
+            'status' => 'OK',
+            'data' => $profile,
+        ]);
+    }
+
     public function profile(Request $r): JsonResponse
     {
         $profile = Auth::user();

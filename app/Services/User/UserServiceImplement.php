@@ -128,8 +128,8 @@ class UserServiceImplement extends ServiceApi implements UserService
             $this->request->validate([
                 'name' => ['required'],
                 'email' => ['required', 'email'],
-                'instansi' => ['required'],
-                'periode' => ['required'],
+                'instansi' => ['sometimes', 'required'],
+                'periode' => ['sometimes', 'required'],
                 'password' => ['confirmed', 'min:6'],
                 'role' => ['required'],
                 'photo' => ['mimes:png,jpg,webp', 'max:1024'],
@@ -157,8 +157,8 @@ class UserServiceImplement extends ServiceApi implements UserService
                 'name' => $this->request->name,
                 'email' => $this->request->email,
                 'date' => $getUserId->date,
-                'instansi' => $this->request->instansi,
-                'periode' => $this->request->periode,
+                'instansi' => $this->request->instansi ?? $getUserId->instansi,
+                'periode' => $this->request->periode ?? $getUserId->periode,
                 'role' => $this->request->role,
             ]);
 

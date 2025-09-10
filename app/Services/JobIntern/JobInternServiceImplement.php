@@ -87,6 +87,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                         'description' => $this->request->description,
                         'deadline' => $this->request->deadline ?? CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
                         'status' => $status,
+                        'manage_by' => Auth::user()->name,
                     ]);
 
                     TempJobIntern::create([
@@ -97,6 +98,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                         'description' => $data->description,
                         'deadline' => $data->deadline,
                         'status' => $data->status,
+                        'manage_by' => $data->manage_by,
                         'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
                     ]);
                     break;
@@ -108,6 +110,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                         'description' => $this->request->description,
                         'deadline' => CarbonImmutable::createFromDate(0001, 1, 1, 'Asia/Kuala_Lumpur'),
                         'status' => CheckJobStatus::PENDING,
+                        'manage_by' => Auth::user()->name,
                     ]);
 
                     TempJobIntern::create([
@@ -118,6 +121,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                         'description' => $data->description,
                         'deadline' => $data->deadline,
                         'status' => $data->status,
+                        'manage_by' => $data->manage_by,
                         'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
                     ]);
                     break;
@@ -170,6 +174,7 @@ class JobInternServiceImplement extends ServiceApi implements JobInternService
                     'description' => $this->request->description ?? $getJobInternId->description,
                     'deadline' => $this->request->deadline ?? $getJobInternId->deadline,
                     'status' => $status,
+                    'manage_by' => $getJobInternId->manage_by,
                     'expired_at' => now('Asia/Kuala_Lumpur')->addWeek()->startOfWeek(CarbonInterface::MONDAY),
                 ]);
             }

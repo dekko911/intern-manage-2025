@@ -215,7 +215,6 @@ class InternAttendServiceImplement extends ServiceApi implements InternAttendSer
                 default;
             }
 
-
             return $this->setCode(200)
                 ->setMessage("$this->title_intern $this->update_message_intern & ditandai di temp_intern_attends!")
                 ->setData($data);

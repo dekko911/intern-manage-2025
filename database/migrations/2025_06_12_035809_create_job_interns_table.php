@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->text('description');
             $table->date('deadline')->nullable();
             $table->enum('status', ['Pending', 'Done'])->nullable();
+            $table->string('manage_by');
             $table->timestamps();
         });
     }

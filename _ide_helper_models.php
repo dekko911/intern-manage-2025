@@ -78,6 +78,7 @@ namespace App\Models{
  * @property string $description
  * @property string|null $deadline
  * @property CheckJobStatus|null $status
+ * @property string $manage_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
@@ -95,6 +96,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|JobIntern whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|JobIntern whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|JobIntern whereCreated($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JobIntern whereManageBy($value)
  * @mixin \Eloquent
  */
 	class JobIntern extends \Eloquent {}
@@ -181,6 +183,7 @@ namespace App\Models{
  * @property string $description
  * @property string|null $deadline
  * @property CheckJobStatus|null $status
+ * @property string $manage_by
  * @property string|null $expired_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -200,6 +203,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereTask($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TempJobIntern whereManageBy($value)
  * @mixin \Eloquent
  */
 	class TempJobIntern extends \Eloquent {}
